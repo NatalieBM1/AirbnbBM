@@ -1,8 +1,11 @@
-const express = require('express');
+// backend/routes/propertyRoutes.js (ESM)
+import express from "express";
+import { getProperties, getPropertyDetail, getCities } from "../controllers/propertyController.js";
+
 const router = express.Router();
-const propertyController = require('../controllers/propertyController');
 
-router.get('/', propertyController.getProperties);
-router.get('/:id', propertyController.getPropertyDetail);
+router.get("/cities", getCities);   // lista ciudades
+router.get("/", getProperties);     // listado
+router.get("/:id", getPropertyDetail); // detalle
 
-module.exports = router;
+export default router;
