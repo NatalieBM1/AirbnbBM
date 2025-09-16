@@ -18,15 +18,12 @@ interface FilterBarProps {
 
 const categories = [
   { id: "all", label: "Todo", icon: Home },
-  { id: "pools", label: "Piscinas increíbles", icon: Waves },
+  { id: "pools", label: "Piscinas", icon: Waves },
   { id: "cabins", label: "Cabañas", icon: Mountain },
-  { id: "beachfront", label: "Frente al mar", icon: Palmtree },
-  { id: "tiny-homes", label: "Casas pequeñas", icon: Home },
-  { id: "treehouses", label: "Casas del árbol", icon: TreePine },
-  { id: "design", label: "Diseño", icon: Building },
-  { id: "trending", label: "Tendencia", icon: Flame },
-  { id: "castles", label: "Castillos", icon: Castle },
-  { id: "camping", label: "Camping", icon: Tent },
+  { id: "beachfront", label: "Costa", icon: Palmtree },
+  { id: "tiny-homes", label: "Pequeñas", icon: Home },
+  { id: "design", label: "Modernas", icon: Building },
+  { id: "trending", label: "Populares", icon: Flame },
 ];
 
 export default function FilterBar({ filters, onChange }: FilterBarProps) {
@@ -40,59 +37,57 @@ export default function FilterBar({ filters, onChange }: FilterBarProps) {
   };
 
   return (
-    <section className="bg-white border-b border-gray-200 sticky top-20 z-30 shadow-sm" data-testid="filter-bar">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <section className="bg-white border-b border-gray-200 sticky top-20 z-30" data-testid="filter-bar">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
         {/* Category Filters */}
-        <div className="flex items-center space-x-8 overflow-x-auto scrollbar-hide mb-6">
-          {categories.map((category) => {
-            const IconComponent = category.icon;
-            const isSelected = filters?.propertyType === category.id;
-            return (
-              <button
-                key={category.id}
-                className={`flex flex-col items-center space-y-2 min-w-max px-4 py-4 rounded-lg transition-all duration-200 group hover:bg-gray-50 ${
-                  isSelected 
-                    ? "text-gray-900 bg-gray-50 border-b-2 border-black" 
-                    : "text-gray-600 hover:text-gray-900"
-                }`}
-                onClick={() => handleCategoryClick(category.id)}
-                data-testid={`button-category-${category.id}`}
-              >
-                <div className={`p-2 rounded-full transition-all duration-200 ${
-                  isSelected 
-                    ? "bg-red-100 text-red-600" 
-                    : "bg-gray-100 text-gray-600 group-hover:bg-red-50 group-hover:text-red-500"
-                }`}>
-                  <IconComponent className="h-6 w-6" />
-                </div>
-                <span className={`text-xs font-medium transition-all duration-200 ${
-                  isSelected ? "text-gray-900 font-semibold" : "text-gray-600 group-hover:text-gray-900"
-                }`}>
-                  {category.label}
-                </span>
-              </button>
-            );
-          })}
-        </div>
-        
-        {/* Controls */}
-        <div className="flex justify-between items-center">
-          <button 
-            className="flex items-center space-x-2 px-6 py-3 bg-white border border-gray-300 rounded-xl text-gray-700 hover:bg-gray-50 hover:border-gray-400 transition-all duration-200 shadow-sm hover:shadow-md"
-            data-testid="button-filters"
-          >
-            <SlidersHorizontal className="h-4 w-4" />
-            <span className="font-medium">Filtros</span>
-          </button>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-6 overflow-x-auto scrollbar-hide">
+            {categories.map((category) => {
+              const IconComponent = category.icon;
+              const isSelected = filters?.propertyType === category.id;
+              return (
+                <button
+                  key={category.id}
+                  className={`flex flex-col items-center space-y-1 min-w-max px-3 py-2 transition-all duration-200 ${
+                    isSelected 
+                      ? "text-gray-900 border-b-2 border-gray-900" 
+                      : "text-gray-600 hover:text-gray-900"
+                  }`}
+                  onClick={() => handleCategoryClick(category.id)}
+                  data-testid={`button-category-${category.id}`}
+                >
+                  <IconComponent className={`h-5 w-5 ${
+                    isSelected ? "text-gray-900" : "text-gray-600"
+                  }`} />
+                  <span className={`text-xs font-medium ${
+                    isSelected ? "text-gray-900 font-semibold" : "text-gray-600"
+                  }`}>
+                    {category.label}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
           
-          <Link href="/map">
-            <button className="flex items-center space-x-2 px-6 py-3 bg-gray-900 text-white rounded-xl hover:bg-gray-800 transition-all duration-200 shadow-md hover:shadow-lg"
-              data-testid="button-show-map"
+          {/* Controls */}
+          <div className="flex items-center space-x-3">
+            <button 
+              className="flex items-center space-x-2 px-4 py-2 bg-white border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-all duration-200"
+              data-testid="button-filters"
             >
-              <Map className="h-4 w-4" />
-              <span className="font-medium">Mostrar mapa</span>
+              <SlidersHorizontal className="h-4 w-4" />
+              <span className="text-sm font-medium">Filtros</span>
             </button>
-          </Link>
+            
+            <Link href="/map">
+              <button className="flex items-center space-x-2 px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-all duration-200"
+                data-testid="button-show-map"
+              >
+                <Map className="h-4 w-4" />
+                <span className="text-sm font-medium">Mapa</span>
+              </button>
+            </Link>
+          </div>
         </div>
       </div>
     </section>

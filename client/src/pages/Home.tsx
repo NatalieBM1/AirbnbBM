@@ -56,7 +56,57 @@ export default function Home() {
 
     // Apply property type filter
     if (filters.propertyType && filters.propertyType !== 'all') {
-      const typeMatch = property.title.toLowerCase().includes(filters.propertyType.toLowerCase());
+      let typeMatch = false;
+      
+      switch (filters.propertyType) {
+        case 'pools':
+          typeMatch = property.amenities?.some((amenity: string) => 
+            amenity.toLowerCase().includes('piscina') || 
+            amenity.toLowerCase().includes('pool')
+          );
+          break;
+        case 'cabins':
+          typeMatch = property.title.toLowerCase().includes('cabaña') || 
+                     property.title.toLowerCase().includes('cabin') ||
+                     property.location.toLowerCase().includes('montaña');
+          break;
+        case 'beachfront':
+          typeMatch = property.location.toLowerCase().includes('cartagena') || 
+                     property.location.toLowerCase().includes('santa marta') ||
+                     property.location.toLowerCase().includes('costa') ||
+                     property.amenities?.some((amenity: string) => 
+                       amenity.toLowerCase().includes('playa')
+                     );
+          break;
+        case 'tiny-homes':
+          typeMatch = property.title.toLowerCase().includes('pequeña') || 
+                     property.title.toLowerCase().includes('tiny') ||
+                     property.bedrooms <= 1;
+          break;
+        case 'treehouses':
+          typeMatch = property.title.toLowerCase().includes('árbol') || 
+                     property.title.toLowerCase().includes('tree');
+          break;
+        case 'design':
+          typeMatch = property.title.toLowerCase().includes('moderna') || 
+                     property.title.toLowerCase().includes('loft') ||
+                     property.title.toLowerCase().includes('diseño');
+          break;
+        case 'trending':
+          typeMatch = property.rating >= 4.8;
+          break;
+        case 'castles':
+          typeMatch = property.title.toLowerCase().includes('castillo') || 
+                     property.title.toLowerCase().includes('palacio');
+          break;
+        case 'camping':
+          typeMatch = property.title.toLowerCase().includes('camping') || 
+                     property.title.toLowerCase().includes('tienda');
+          break;
+        default:
+          typeMatch = true;
+      }
+      
       if (!typeMatch) return false;
     }
 
