@@ -46,3 +46,4 @@ export async function fetchDetail({ city, id }) {
 }
 
 export const api = { fetchSearch, fetchPopular, fetchNextMonth, fetchDetail };
+
