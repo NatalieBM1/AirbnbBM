@@ -7,15 +7,54 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Search, Globe, Menu, User, Home, Bell } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 
-export default function Navbar() {
+interface NavbarProps {
+  onSearch?: (query: string) => void;
+}
+
+export default function Navbar({ onSearch }: NavbarProps) {
   const [location, setLocation] = useLocation();
   const { user, isAuthenticated, logout } = useAuth();
   const [searchQuery, setSearchQuery] = useState("");
+  const [showSuggestions, setShowSuggestions] = useState(false);
+
+  // Common search suggestions
+  const searchSuggestions = [
+    'Malibu, California',
+    'Aspen, Colorado', 
+    'New York, NY',
+    'Miami Beach, Florida',
+    'San Francisco, California',
+    'Austin, Texas',
+    'Seattle, Washington',
+    'Portland, Oregon'
+  ];
+
+  const filteredSuggestions = searchSuggestions.filter(location =>
+    location.toLowerCase().includes(searchQuery.toLowerCase()) && searchQuery.length > 0
+  );
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Implement search functionality
-    console.log("Search:", searchQuery);
+    if (searchQuery.trim()) {
+      if (onSearch) {
+        onSearch(searchQuery.trim());
+      }
+      setShowSuggestions(false);
+      
+      // Navigate to home with search query
+      const params = new URLSearchParams({ search: searchQuery.trim() });
+      setLocation(`/?${params.toString()}`);
+    }
+  };
+
+  const handleSuggestionClick = (suggestion: string) => {
+    setSearchQuery(suggestion);
+    setShowSuggestions(false);
+    if (onSearch) {
+      onSearch(suggestion);
+    }
+    const params = new URLSearchParams({ search: suggestion });
+    setLocation(`/?${params.toString()}`);
   };
 
   const handleLogout = () => {
@@ -34,26 +73,19 @@ export default function Navbar() {
           </Link>
 
           {/* Search Bar */}
-          <div className="flex-1 max-w-2xl mx-8">
-            <form onSubmit={handleSearch} className="relative">
+          <div className="flex-1 max-w-2xl mx-8 relative">
+            <form onSubmit={handleSearch}>
               <div className="search-shadow bg-background border border-border rounded-full flex items-center hover:shadow-lg transition-shadow duration-200">
                 <Input
                   type="text"
                   placeholder="Where are you going?"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
+                  onFocus={() => setShowSuggestions(true)}
+                  onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
                   className="flex-1 border-0 bg-transparent px-6 py-3 rounded-l-full focus:ring-0"
                   data-testid="input-search"
                 />
-                <div className="border-l border-border px-6 py-3">
-                  <span className="text-sm text-muted-foreground">Check in</span>
-                </div>
-                <div className="border-l border-border px-6 py-3">
-                  <span className="text-sm text-muted-foreground">Check out</span>
-                </div>
-                <div className="border-l border-border px-6 py-3">
-                  <span className="text-sm text-muted-foreground">Guests</span>
-                </div>
                 <Button 
                   type="submit"
                   size="icon"
@@ -63,6 +95,25 @@ export default function Navbar() {
                   <Search className="h-4 w-4" />
                 </Button>
               </div>
+              
+              {/* Search Suggestions */}
+              {showSuggestions && filteredSuggestions.length > 0 && (
+                <div className="absolute top-full left-0 right-0 bg-background border border-border rounded-xl shadow-lg z-50 mt-2">
+                  {filteredSuggestions.map((suggestion, index) => (
+                    <div
+                      key={index}
+                      className="px-4 py-3 hover:bg-muted cursor-pointer border-b border-border last:border-b-0"
+                      onClick={() => handleSuggestionClick(suggestion)}
+                      data-testid={`search-suggestion-${index}`}
+                    >
+                      <div className="flex items-center space-x-3">
+                        <Search className="h-4 w-4 text-muted-foreground" />
+                        <span>{suggestion}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </form>
           </div>
 

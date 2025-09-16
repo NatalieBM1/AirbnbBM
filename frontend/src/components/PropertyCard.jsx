@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const PropertyCard = ({ property }) => {
+const PropertyCard = ({ property, isSelected = false, onClick }) => {
   const formatPrice = (price) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
@@ -15,7 +15,17 @@ const PropertyCard = ({ property }) => {
     : 'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=400';
 
   return (
-    <Link to={`/property/${property.id}`} className="property-card">
+    <Link 
+      to={`/property/${property.id}`} 
+      className={`property-card ${isSelected ? 'selected' : ''}`}
+      onClick={(e) => {
+        if (onClick) {
+          e.preventDefault();
+          onClick(property);
+        }
+      }}
+      data-testid={`property-card-${property.id}`}
+    >
       <div className="property-image-container">
         <img 
           src={mainImage} 

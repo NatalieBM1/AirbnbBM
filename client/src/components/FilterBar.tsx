@@ -3,7 +3,21 @@ import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 import { Home, Mountain, Waves, TreePine, Building, Flame, SlidersHorizontal, Map } from "lucide-react";
 
+interface Filters {
+  priceRange: [number, number];
+  propertyType: string;
+  guests: string;
+  bedrooms: string;
+  amenities: string[];
+}
+
+interface FilterBarProps {
+  filters?: Filters;
+  onChange?: (filters: Filters) => void;
+}
+
 const categories = [
+  { id: "all", label: "All", icon: Home },
   { id: "pools", label: "Amazing pools", icon: Waves },
   { id: "cabins", label: "Cabins", icon: Mountain },
   { id: "beachfront", label: "Beachfront", icon: Waves },
@@ -13,8 +27,15 @@ const categories = [
   { id: "trending", label: "Trending", icon: Flame },
 ];
 
-export default function FilterBar() {
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+export default function FilterBar({ filters, onChange }: FilterBarProps) {
+  const handleCategoryClick = (categoryId: string) => {
+    if (onChange && filters) {
+      onChange({
+        ...filters,
+        propertyType: categoryId
+      });
+    }
+  };
 
   return (
     <section className="bg-background border-b border-border sticky top-20 z-30" data-testid="filter-bar">
@@ -23,18 +44,17 @@ export default function FilterBar() {
         <div className="flex items-center space-x-6 overflow-x-auto scrollbar-hide mb-4">
           {categories.map((category) => {
             const IconComponent = category.icon;
+            const isSelected = filters?.propertyType === category.id;
             return (
               <Button
                 key={category.id}
                 variant="ghost"
                 className={`flex flex-col items-center space-y-2 min-w-max px-4 py-3 ${
-                  selectedCategory === category.id 
+                  isSelected 
                     ? "text-foreground border-b-2 border-foreground" 
                     : "text-muted-foreground hover:text-foreground"
                 }`}
-                onClick={() => setSelectedCategory(
-                  selectedCategory === category.id ? null : category.id
-                )}
+                onClick={() => handleCategoryClick(category.id)}
                 data-testid={`button-category-${category.id}`}
               >
                 <IconComponent className="h-5 w-5" />
