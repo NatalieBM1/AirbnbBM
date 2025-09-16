@@ -1,0 +1,80 @@
+Crea un proyecto desde cero con un stack **React (frontend) + Node/Express (backend)** en la siguiente estructura:
+
+AIRBNBBM/
+├─ backend/
+│  ├─ controllers/
+│  │  ├─ authController.js
+│  │  ├─ bookingController.js
+│  │  ├─ notificationController.js
+│  │  ├─ paymentController.js
+│  │  └─ propertyController.js
+│  ├─ routes/
+│  │  ├─ authRoutes.js
+│  │  ├─ bookingRoutes.js
+│  │  ├─ notificationRoutes.js
+│  │  ├─ paymentRoutes.js
+│  │  └─ propertyRoutes.js
+│  ├─ middleware/
+│  │  └─ authMiddleware.js             # auth y manejo de errores
+│  ├─ server.js                        # configuración Express, CORS, rutas y /health
+│  ├─ supabaseClient.js                # conexión a Supabase (si se usa)
+│  ├─ .env                             # PORT, CORS_ORIGIN, etc.
+│  └─ package.json
+│
+├─ frontend/
+│  ├─ public/
+│  │  └─ index.html
+│  ├─ src/
+│  │  ├─ components/
+│  │  │  ├─ Navbar.jsx
+│  │  │  ├─ PropertyCard.jsx
+│  │  │  └─ FilterBar.jsx
+│  │  ├─ context/
+│  │  │  └─ AuthContext.js
+│  │  ├─ pages/
+│  │  │  ├─ Home.jsx
+│  │  │  ├─ PropertyDetail.jsx
+│  │  │  ├─ Booking.jsx
+│  │  │  ├─ Notifications.jsx
+│  │  │  ├─ Payment.jsx
+│  │  │  └─ Register.jsx / Login.jsx
+│  │  ├─ services/
+│  │  │  └─ api.js
+│  │  ├─ styles/
+│  │  │  └─ airbnb.css                 # estilos inspirados en Airbnb
+│  │  ├─ App.js
+│  │  └─ index.js
+│  ├─ .env                             # REACT_APP_API_BASE=http://127.0.0.1:4000/api
+│  └─ package.json
+│
+├─ package.json                        # raíz con scripts de orquestación (concurrently)
+└─ README.md
+
+🔹 Requisitos backend:
+1. Usa **Node.js + Express**.
+2. Instala dependencias: express, cors, dotenv, axios, supabase-js.
+3. En `server.js` configura:
+   - Middleware CORS
+   - Rutas `/api/properties`, `/api/bookings`, `/api/payments`, `/api/notifications`, `/api/auth`
+   - Ruta `/health` que devuelva `{status: "ok"}`
+4. En los controladores y rutas deja funciones iniciales tipo “Hello World” para cada endpoint.
+
+🔹 Requisitos frontend:
+1. Usa **React con Vite** (más liviano que CRA).
+2. Instala dependencias: react-router-dom, axios, context API.
+3. `Navbar.jsx` debe parecerse al navbar de Airbnb: logo a la izquierda, barra de búsqueda central, botones de usuario/deseos a la derecha.
+4. `Home.jsx` debe mostrar un **grid de propiedades** con `PropertyCard.jsx` que imite las cards de Airbnb (imagen, título, precio por noche).
+5. `FilterBar.jsx` debe incluir botones estilo Airbnb para filtrar propiedades.
+6. `PropertyDetail.jsx` debe simular la vista de una propiedad (galería, descripción, precio).
+7. En `airbnb.css` usa un diseño limpio, minimalista, con colores claros y tipografía similar a Airbnb.
+8. Asegúrate que `App.js` tenga enrutamiento con react-router-dom para navegar entre páginas.
+
+🔹 Monorepo:
+1. En la raíz crea un `package.json` con `concurrently` para orquestar:
+   - `npm run dev:backend` → inicia backend en puerto 4000
+   - `npm run dev:frontend` → inicia frontend en puerto 3000
+   - `npm run dev` → inicia ambos al tiempo
+2. Configura scripts básicos en frontend y backend.
+
+Objetivo final:
+Quiero un **Airbnb Clone básico**, con frontend en React que se parezca al estilo de Airbnb y backend en Node/Express con endpoints preparados para autenticación, propiedades, reservas, notificaciones y pagos.
