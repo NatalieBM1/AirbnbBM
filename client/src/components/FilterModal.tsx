@@ -49,8 +49,8 @@ export default function FilterModal({ filters, onChange, resultsCount = 0 }: Fil
     const clearedFilters: Filters = {
       priceRange: [0, 1000],
       propertyType: 'all',
-      guests: '',
-      bedrooms: '',
+      guests: 'any',
+      bedrooms: 'any',
       amenities: []
     };
     setLocalFilters(clearedFilters);
@@ -85,9 +85,9 @@ export default function FilterModal({ filters, onChange, resultsCount = 0 }: Fil
         >
           <SlidersHorizontal className="h-4 w-4" />
           <span className="text-sm font-medium">Filtros</span>
-          {(filters.amenities.length > 0 || filters.propertyType !== 'all' || filters.guests || filters.bedrooms) && (
+          {(filters.amenities.length > 0 || filters.propertyType !== 'all' || (filters.guests && filters.guests !== 'any') || (filters.bedrooms && filters.bedrooms !== 'any')) && (
             <span className="bg-red-500 text-white text-xs rounded-full px-2 py-0.5 min-w-[20px] h-5 flex items-center justify-center">
-              {filters.amenities.length + (filters.propertyType !== 'all' ? 1 : 0) + (filters.guests ? 1 : 0) + (filters.bedrooms ? 1 : 0)}
+              {filters.amenities.length + (filters.propertyType !== 'all' ? 1 : 0) + (filters.guests && filters.guests !== 'any' ? 1 : 0) + (filters.bedrooms && filters.bedrooms !== 'any' ? 1 : 0)}
             </span>
           )}
         </button>
@@ -126,7 +126,7 @@ export default function FilterModal({ filters, onChange, resultsCount = 0 }: Fil
                 <SelectValue placeholder="Cualquier cantidad" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">Cualquier cantidad</SelectItem>
+                <SelectItem value="any">Cualquier cantidad</SelectItem>
                 <SelectItem value="1">1 huésped</SelectItem>
                 <SelectItem value="2">2 huéspedes</SelectItem>
                 <SelectItem value="3">3 huéspedes</SelectItem>
@@ -145,7 +145,7 @@ export default function FilterModal({ filters, onChange, resultsCount = 0 }: Fil
                 <SelectValue placeholder="Cualquier cantidad" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">Cualquier cantidad</SelectItem>
+                <SelectItem value="any">Cualquier cantidad</SelectItem>
                 <SelectItem value="1">1 habitación</SelectItem>
                 <SelectItem value="2">2 habitaciones</SelectItem>
                 <SelectItem value="3">3 habitaciones</SelectItem>

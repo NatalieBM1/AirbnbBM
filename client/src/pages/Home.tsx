@@ -25,8 +25,8 @@ export default function Home() {
   const [filters, setFilters] = useState<Filters>({
     priceRange: [0, 1000],
     propertyType: 'all',
-    guests: '',
-    bedrooms: '',
+    guests: 'any',
+    bedrooms: 'any',
     amenities: []
   });
 
@@ -117,13 +117,13 @@ export default function Home() {
     }
 
     // Apply guests filter
-    if (filters.guests) {
+    if (filters.guests && filters.guests !== 'any') {
       const guestCount = parseInt(filters.guests);
       if (property.maxGuests < guestCount) return false;
     }
 
     // Apply bedrooms filter
-    if (filters.bedrooms) {
+    if (filters.bedrooms && filters.bedrooms !== 'any') {
       const bedroomCount = parseInt(filters.bedrooms);
       if (property.bedrooms < bedroomCount) return false;
     }
