@@ -130,13 +130,39 @@ export default function Home() {
 
     // Apply amenities filter
     if (filters.amenities.length > 0) {
-      const hasAllAmenities = filters.amenities.every(amenity =>
-        property.amenities?.some((propAmenity: string) =>
-          propAmenity.toLowerCase().includes(amenity.toLowerCase()) ||
-          (amenity === 'ac' && propAmenity.toLowerCase().includes('air conditioning')) ||
-          (amenity === 'wifi' && propAmenity.toLowerCase().includes('wifi'))
-        )
-      );
+      const hasAllAmenities = filters.amenities.every(amenity => {
+        return property.amenities?.some((propAmenity: string) => {
+          const amenityLower = propAmenity.toLowerCase();
+          switch (amenity) {
+            case 'wifi':
+              return amenityLower.includes('wifi') || amenityLower.includes('internet');
+            case 'kitchen':
+              return amenityLower.includes('cocina') || amenityLower.includes('kitchen');
+            case 'washing-machine':
+              return amenityLower.includes('lavadora') || amenityLower.includes('washing');
+            case 'air-conditioning':
+              return amenityLower.includes('aire') || amenityLower.includes('air conditioning');
+            case 'pool':
+              return amenityLower.includes('piscina') || amenityLower.includes('pool');
+            case 'gym':
+              return amenityLower.includes('gimnasio') || amenityLower.includes('gym');
+            case 'parking':
+              return amenityLower.includes('estacionamiento') || amenityLower.includes('parking');
+            case 'balcony':
+              return amenityLower.includes('balcón') || amenityLower.includes('balcony');
+            case 'garden':
+              return amenityLower.includes('jardín') || amenityLower.includes('garden');
+            case 'tv':
+              return amenityLower.includes('tv') || amenityLower.includes('televisión');
+            case 'fireplace':
+              return amenityLower.includes('chimenea') || amenityLower.includes('fireplace');
+            case 'hot-tub':
+              return amenityLower.includes('jacuzzi') || amenityLower.includes('hot tub');
+            default:
+              return amenityLower.includes(amenity.toLowerCase());
+          }
+        });
+      });
       if (!hasAllAmenities) return false;
     }
 
@@ -156,7 +182,7 @@ export default function Home() {
 
   return (
     <main data-testid="home-page">
-      <FilterBar filters={filters} onChange={setFilters} />
+      <FilterBar filters={filters} onChange={setFilters} resultsCount={filteredProperties.length} />
       
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* View Toggle and Results Summary */}

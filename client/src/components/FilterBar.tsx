@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
-import { Home, Mountain, Waves, TreePine, Building, Flame, SlidersHorizontal, Map, Palmtree, Castle, Tent, Car } from "lucide-react";
+import { Home, Mountain, Waves, TreePine, Building, Flame, Map, Palmtree, SlidersHorizontal } from "lucide-react";
+import FilterModal from "./FilterModal";
 
 interface Filters {
   priceRange: [number, number];
@@ -14,6 +15,7 @@ interface Filters {
 interface FilterBarProps {
   filters?: Filters;
   onChange?: (filters: Filters) => void;
+  resultsCount?: number;
 }
 
 const categories = [
@@ -26,7 +28,7 @@ const categories = [
   { id: "trending", label: "Populares", icon: Flame },
 ];
 
-export default function FilterBar({ filters, onChange }: FilterBarProps) {
+export default function FilterBar({ filters, onChange, resultsCount = 0 }: FilterBarProps) {
   const handleCategoryClick = (categoryId: string) => {
     if (onChange && filters) {
       onChange({
@@ -71,13 +73,13 @@ export default function FilterBar({ filters, onChange }: FilterBarProps) {
           
           {/* Controls */}
           <div className="flex items-center space-x-3">
-            <button 
-              className="flex items-center space-x-2 px-4 py-2 bg-white border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-all duration-200"
-              data-testid="button-filters"
-            >
-              <SlidersHorizontal className="h-4 w-4" />
-              <span className="text-sm font-medium">Filtros</span>
-            </button>
+            {filters && onChange && (
+              <FilterModal 
+                filters={filters} 
+                onChange={onChange} 
+                resultsCount={resultsCount}
+              />
+            )}
             
             <Link href="/map">
               <button className="flex items-center space-x-2 px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-all duration-200"
