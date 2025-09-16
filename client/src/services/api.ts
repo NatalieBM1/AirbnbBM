@@ -1,7 +1,7 @@
 import { apiRequest } from "@/lib/queryClient";
 import { LoginData, RegisterData, User, Property, Booking, Notification, Payment } from "@shared/schema";
 
-const getAuthHeaders = () => {
+const getAuthHeaders = (): Record<string, string> => {
   const token = localStorage.getItem("airbnb_token");
   return token ? { Authorization: `Bearer ${token}` } : {};
 };
