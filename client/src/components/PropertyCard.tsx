@@ -25,7 +25,7 @@ export default function PropertyCard({ property }: PropertyCardProps) {
       <Link href={`/property/${property.id}`}>
         <div className="relative rounded-xl overflow-hidden mb-3">
           <img
-            src={property.images[0] || "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=400"}
+            src={property.images?.[0] || "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=400"}
             alt={property.title}
             className="w-full h-64 object-cover"
             data-testid={`img-property-${property.id}`}

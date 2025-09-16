@@ -88,7 +88,7 @@ export default function MapPage() {
         <MapView 
           properties={filteredProperties} 
           onMarkerClick={handleMarkerClick}
-          selectedPropertyId={selectedPropertyId}
+          selectedPropertyId={selectedPropertyId || undefined}
         />
       )}
 
@@ -171,7 +171,7 @@ export default function MapPage() {
             <div className="flex space-x-4">
               <div className="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0">
                 <img
-                  src={previewProperty.images[0] || "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=200"}
+                  src={previewProperty.images?.[0] || "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=200"}
                   alt={previewProperty.title}
                   className="w-full h-full object-cover"
                   data-testid="img-preview"

@@ -163,7 +163,7 @@ export default function Notifications() {
                         className="text-xs text-muted-foreground" 
                         data-testid={`notification-time-${notification.id}`}
                       >
-                        {formatTimeAgo(new Date(notification.createdAt))}
+                        {formatTimeAgo(new Date(notification.createdAt || new Date()))}
                       </span>
                     </div>
                     {!notification.isRead && (

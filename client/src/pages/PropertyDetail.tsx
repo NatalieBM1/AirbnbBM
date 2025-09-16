@@ -101,14 +101,14 @@ export default function PropertyDetail() {
       <div className="grid grid-cols-2 gap-2 rounded-xl overflow-hidden mb-8 h-96">
         <div className="relative">
           <img
-            src={property.images[0] || "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800"}
+            src={property.images?.[0] || "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800"}
             alt={property.title}
             className="w-full h-full object-cover"
             data-testid="img-main-property"
           />
         </div>
         <div className="grid grid-cols-2 gap-2">
-          {property.images.slice(1, 5).map((image, index) => (
+          {property.images?.slice(1, 5).map((image, index) => (
             <img
               key={index}
               src={image}
@@ -184,7 +184,7 @@ export default function PropertyDetail() {
           <div className="mb-6">
             <h3 className="text-xl font-bold text-foreground mb-4">What this place offers</h3>
             <div className="grid grid-cols-2 gap-4">
-              {property.amenities.map((amenity, index) => (
+              {property.amenities?.map((amenity, index) => (
                 <div key={index} className="flex items-center space-x-3">
                   <Wifi className="h-5 w-5 text-muted-foreground" />
                   <span data-testid={`text-amenity-${index}`}>{amenity}</span>

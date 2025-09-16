@@ -364,7 +364,7 @@ export default function Booking() {
               {/* Property Summary */}
               <div className="flex space-x-4 mb-6">
                 <img
-                  src={property.images[0] || "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=200"}
+                  src={property.images?.[0] || "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=200"}
                   alt={property.title}
                   className="w-24 h-20 rounded-lg object-cover"
                   data-testid="img-booking-summary"

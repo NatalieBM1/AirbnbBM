@@ -145,6 +145,7 @@ export default function Register() {
                           type="tel"
                           placeholder="+1 (555) 123-4567"
                           {...field}
+                          value={field.value || ""}
                           data-testid="input-phone"
                         />
                       </FormControl>
