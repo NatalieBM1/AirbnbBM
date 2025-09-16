@@ -161,8 +161,9 @@ export class MemStorage implements IStorage {
     const user: User = {
       ...insertUser,
       id,
-      avatar: "",
-      isHost: false,
+      avatar: insertUser.avatar || null,
+      isHost: insertUser.isHost || false,
+      phone: insertUser.phone || null,
       createdAt: new Date(),
     };
     this.users.set(id, user);
@@ -182,7 +183,7 @@ export class MemStorage implements IStorage {
   async getProperties(limit = 20, offset = 0): Promise<Property[]> {
     const allProperties = Array.from(this.properties.values())
       .filter(p => p.isActive)
-      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+      .sort((a, b) => (b.createdAt?.getTime() || 0) - (a.createdAt?.getTime() || 0));
     
     return allProperties.slice(offset, offset + limit);
   }
@@ -200,6 +201,10 @@ export class MemStorage implements IStorage {
     const property: Property = {
       ...insertProperty,
       id,
+      latitude: insertProperty.latitude || null,
+      longitude: insertProperty.longitude || null,
+      images: insertProperty.images || [],
+      amenities: insertProperty.amenities || [],
       rating: "0",
       reviewCount: 0,
       isActive: true,
@@ -236,6 +241,8 @@ export class MemStorage implements IStorage {
     const booking: Booking = {
       ...insertBooking,
       id,
+      status: insertBooking.status || "pending",
+      specialRequests: insertBooking.specialRequests || null,
       createdAt: new Date(),
     };
     this.bookings.set(id, booking);
@@ -255,7 +262,7 @@ export class MemStorage implements IStorage {
   async getNotificationsByUser(userId: string): Promise<Notification[]> {
     return Array.from(this.notifications.values())
       .filter(n => n.userId === userId)
-      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+      .sort((a, b) => (b.createdAt?.getTime() || 0) - (a.createdAt?.getTime() || 0));
   }
 
   async createNotification(insertNotification: InsertNotification): Promise<Notification> {
@@ -263,7 +270,7 @@ export class MemStorage implements IStorage {
     const notification: Notification = {
       ...insertNotification,
       id,
-      isRead: false,
+      isRead: insertNotification.isRead || false,
       createdAt: new Date(),
     };
     this.notifications.set(id, notification);
@@ -293,6 +300,8 @@ export class MemStorage implements IStorage {
     const payment: Payment = {
       ...insertPayment,
       id,
+      status: insertPayment.status || "pending",
+      transactionId: insertPayment.transactionId || null,
       createdAt: new Date(),
     };
     this.payments.set(id, payment);
