@@ -74,6 +74,41 @@
     box-shadow: 0 2px 4px rgba(0,0,0,0.1), 0 8px 16px rgba(0,0,0,0.1);
   }
 
+  /* Leaflet map styles */
+  .leaflet-container {
+    height: 100% !important;
+    width: 100% !important;
+    z-index: 1;
+    position: relative;
+  }
+  
+  .leaflet-tile {
+    pointer-events: auto;
+  }
+  
+  .leaflet-tile-container {
+    pointer-events: auto;
+  }
+
+  /* Custom popup styles */
+  .custom-popup .leaflet-popup-content-wrapper {
+    border-radius: 12px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+
+  .custom-popup .leaflet-popup-tip {
+    background: white;
+  }
+
+  /* Custom marker styles */
+  .custom-marker {
+    z-index: 1000;
+  }
+
+  .custom-marker:hover {
+    z-index: 1001;
+  }
+
   .gradient-overlay {
     background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.6) 100%);
   }

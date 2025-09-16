@@ -3,6 +3,9 @@ import { Property } from "@shared/schema";
 import { ZoomIn, ZoomOut, RotateCcw, Maximize } from "lucide-react";
 import L from 'leaflet';
 
+// Import Leaflet CSS
+import 'leaflet/dist/leaflet.css';
+
 interface MapViewProps {
   properties: Property[];
   onMarkerClick?: (propertyId: string) => void;
@@ -54,36 +57,72 @@ export default function MapView({ properties, onMarkerClick, selectedPropertyId 
   const initializeMap = () => {
     if (!mapRef.current || mapInstanceRef.current) return;
 
-    // Calculate center of Colombia properties
-    const validProps = properties.filter(p => 
-      p.latitude && p.longitude && 
-      !isNaN(parseFloat(p.latitude)) && !isNaN(parseFloat(p.longitude))
-    );
-    
-    let center: [number, number] = [4.5709, -74.2973]; // Default Colombia center
-    
-    if (validProps.length > 0) {
-      const avgLat = validProps.reduce((sum, p) => sum + parseFloat(p.latitude!), 0) / validProps.length;
-      const avgLng = validProps.reduce((sum, p) => sum + parseFloat(p.longitude!), 0) / validProps.length;
-      center = [avgLat, avgLng];
+    try {
+      // Calculate center of Colombia properties
+      const validProps = properties.filter(p => 
+        p.latitude && p.longitude && 
+        !isNaN(parseFloat(p.latitude)) && !isNaN(parseFloat(p.longitude))
+      );
+      
+      let center: [number, number] = [4.5709, -74.2973]; // Default Colombia center
+      
+      if (validProps.length > 0) {
+        const avgLat = validProps.reduce((sum, p) => sum + parseFloat(p.latitude!), 0) / validProps.length;
+        const avgLng = validProps.reduce((sum, p) => sum + parseFloat(p.longitude!), 0) / validProps.length;
+        center = [avgLat, avgLng];
+      }
+
+      // Create map with explicit dimensions
+      const map = L.map(mapRef.current, {
+        center: center,
+        zoom: 6,
+        zoomControl: false,
+        attributionControl: true,
+        preferCanvas: false,
+        maxZoom: 19,
+        minZoom: 2
+      });
+
+      console.log('Map initialized with center:', center);
+
+      // Add map tiles - using multiple reliable providers
+      const tileLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+        maxZoom: 19,
+        attribution: '© OpenStreetMap © CARTO',
+        subdomains: 'abcd'
+      });
+      
+      tileLayer.on('tileerror', () => {
+        console.log('Tile error, trying fallback...');
+        // Fallback to OpenStreetMap
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 19,
+          attribution: '© OpenStreetMap'
+        }).addTo(map);
+      });
+      
+      tileLayer.addTo(map);
+      
+      console.log('Tiles added to map');
+
+      // Force map to resize after a moment
+      setTimeout(() => {
+        map.invalidateSize();
+        console.log('Map size invalidated');
+      }, 200);
+
+      // Add another resize check
+      setTimeout(() => {
+        map.invalidateSize();
+        const container = map.getContainer();
+        console.log('Map container dimensions:', container.offsetWidth, 'x', container.offsetHeight);
+      }, 500);
+
+      mapInstanceRef.current = map;
+      setIsMapReady(true);
+    } catch (error) {
+      console.error('Error initializing map:', error);
     }
-
-    // Create map
-    const map = L.map(mapRef.current, {
-      center: center,
-      zoom: 6,
-      zoomControl: false, // We'll add custom controls
-      attributionControl: false
-    });
-
-    // Add OpenStreetMap tiles
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 18,
-      attribution: '© OpenStreetMap contributors'
-    }).addTo(map);
-
-    mapInstanceRef.current = map;
-    setIsMapReady(true);
   };
 
   // Update markers on map
@@ -207,12 +246,17 @@ export default function MapView({ properties, onMarkerClick, selectedPropertyId 
 
   // Initialize map on mount
   useEffect(() => {
-    initializeMap();
+    // Add a small delay to ensure the DOM is ready
+    const timer = setTimeout(() => {
+      initializeMap();
+    }, 100);
     
     return () => {
+      clearTimeout(timer);
       if (mapInstanceRef.current) {
         mapInstanceRef.current.remove();
         mapInstanceRef.current = null;
+        setIsMapReady(false);
       }
     };
   }, []);
@@ -230,8 +274,13 @@ export default function MapView({ properties, onMarkerClick, selectedPropertyId 
         {/* Leaflet Map Container */}
         <div
           ref={mapRef}
-          className="w-full h-[600px]"
+          className="w-full h-[600px] relative z-0 bg-blue-50"
           data-testid="map-canvas"
+          style={{ 
+            minHeight: '600px',
+            maxHeight: '600px',
+            height: '600px'
+          }}
         />
         
         {/* Map Controls */}
@@ -272,10 +321,11 @@ export default function MapView({ properties, onMarkerClick, selectedPropertyId 
 
         {/* Loading overlay */}
         {!isMapReady && (
-          <div className="absolute inset-0 bg-gray-100 flex items-center justify-center">
+          <div className="absolute inset-0 bg-gray-100 flex items-center justify-center z-10">
             <div className="text-center">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mx-auto mb-4"></div>
-              <p className="text-gray-600">Cargando mapa...</p>
+              <p className="text-gray-600">Cargando mapa de calles...</p>
+              <p className="text-xs text-gray-500 mt-2">Conectando con OpenStreetMap</p>
             </div>
           </div>
         )}
