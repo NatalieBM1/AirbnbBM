@@ -10,7 +10,7 @@ const notificationRoutes = require('./routes/notificationRoutes');
 const paymentRoutes = require('./routes/paymentRoutes');
 
 const app = express();
-const PORT = process.env.PORT || 4000;
+const PORT = Number(process.env.BACKEND_PORT || 4000);
 
 // Middleware
 app.use(cors({
@@ -42,6 +42,6 @@ app.use('*', (req, res) => {
   res.status(404).json({ message: 'Route not found' });
 });
 
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`Backend server running on port ${PORT}`);
 });
