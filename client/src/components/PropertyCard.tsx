@@ -10,10 +10,11 @@ interface PropertyCardProps {
 
 export default function PropertyCard({ property }: PropertyCardProps) {
   const formatPrice = (price: string) => {
-    return new Intl.NumberFormat('en-US', {
+    return new Intl.NumberFormat('es-CO', {
       style: 'currency',
-      currency: 'USD',
+      currency: 'COP',
       minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
     }).format(parseFloat(price));
   };
 
@@ -79,7 +80,7 @@ export default function PropertyCard({ property }: PropertyCardProps) {
               >
                 {formatPrice(property.pricePerNight)}
               </span>
-              <span className="text-muted-foreground"> night</span>
+              <span className="text-muted-foreground"> noche</span>
             </div>
           </div>
         </div>
