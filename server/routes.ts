@@ -64,8 +64,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Create welcome notification
       await storage.createNotification({
         userId: user.id,
-        title: "Welcome to AIRBNBBM!",
-        message: "Your account has been successfully created. Start exploring amazing places to stay.",
+        title: "¡Bienvenido a AIRBNBBM!",
+        message: "Tu cuenta ha sido creada exitosamente. Comienza a explorar lugares increíbles para hospedarte.",
         type: "security",
       });
 
@@ -79,23 +79,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post("/api/auth/login", async (req, res) => {
     try {
-      console.log("Login attempt:", { email: req.body.email, passwordLength: req.body.password?.length });
       const { email, password } = loginSchema.parse(req.body);
       
       // Find user
       const user = await storage.getUserByEmail(email);
-      console.log("User found:", !!user);
       if (!user) {
-        console.log("User not found for email:", email);
         return res.status(400).json({ message: "Invalid email or password" });
       }
 
       // Verify password
-      console.log("Comparing passwords...", { providedPasswordLength: password.length, storedPasswordLength: user.password.length });
       const isValidPassword = await bcrypt.compare(password, user.password);
-      console.log("Password valid:", isValidPassword);
       if (!isValidPassword) {
-        console.log("Invalid password for user:", email);
         return res.status(400).json({ message: "Invalid email or password" });
       }
 
@@ -109,8 +103,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Create login notification
       await storage.createNotification({
         userId: user.id,
-        title: "Welcome back!",
-        message: "You have successfully logged in to your account.",
+        title: "¡Bienvenido de vuelta!",
+        message: "Has iniciado sesión exitosamente en tu cuenta.",
         type: "security",
       });
 

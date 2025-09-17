@@ -49,7 +49,7 @@ export default function Notifications() {
     },
     onError: (error: any) => {
       toast({
-        title: "Failed to mark notification as read",
+        title: "Error al marcar notificación como leída",
         description: error.message,
         variant: "destructive",
       });
@@ -67,13 +67,13 @@ export default function Notifications() {
     const diffInDays = Math.floor(diffInHours / 24);
 
     if (diffInHours < 1) {
-      return "Just now";
+      return "Ahora mismo";
     } else if (diffInHours < 24) {
-      return `${diffInHours} hours ago`;
+      return `Hace ${diffInHours} hora${diffInHours > 1 ? 's' : ''}`;
     } else if (diffInDays === 1) {
-      return "1 day ago";
+      return "Hace 1 día";
     } else {
-      return `${diffInDays} days ago`;
+      return `Hace ${diffInDays} días`;
     }
   };
 
@@ -81,8 +81,8 @@ export default function Notifications() {
     return (
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8" data-testid="notifications-page">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-foreground mb-4">Unable to load notifications</h2>
-          <p className="text-muted-foreground">Please try again later.</p>
+          <h2 className="text-2xl font-bold text-foreground mb-4">No se pudieron cargar las notificaciones</h2>
+          <p className="text-muted-foreground">Inténtalo de nuevo más tarde.</p>
         </div>
       </div>
     );
@@ -91,7 +91,7 @@ export default function Notifications() {
   return (
     <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8" data-testid="notifications-page">
       <div className="flex items-center justify-between mb-8">
-        <h1 className="text-3xl font-bold text-foreground">Notifications</h1>
+        <h1 className="text-3xl font-bold text-foreground">Notificaciones</h1>
         {data?.notifications && data.notifications.some(n => !n.isRead) && (
           <Button 
             variant="ghost" 
@@ -104,7 +104,7 @@ export default function Notifications() {
             }}
             data-testid="button-mark-all-read"
           >
-            Mark all as read
+            Marcar todas como leídas
           </Button>
         )}
       </div>
@@ -189,8 +189,8 @@ export default function Notifications() {
           <div className="bg-muted rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
             <Bell className="h-8 w-8 text-muted-foreground" />
           </div>
-          <h3 className="text-lg font-medium text-foreground mb-2">No notifications</h3>
-          <p className="text-muted-foreground">You're all caught up! Check back later for updates.</p>
+          <h3 className="text-lg font-medium text-foreground mb-2">Sin notificaciones</h3>
+          <p className="text-muted-foreground">¡Estás al día! Vuelve más tarde para ver actualizaciones.</p>
         </div>
       )}
     </main>
