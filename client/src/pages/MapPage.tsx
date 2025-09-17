@@ -194,14 +194,14 @@ export default function MapPage() {
                   {previewProperty.title}
                 </h4>
                 <p className="text-sm text-muted-foreground" data-testid="text-preview-price">
-                  {formatPrice(previewProperty.pricePerNight)} night
+                  {formatPrice(previewProperty.pricePerNight)} noche
                 </p>
               </div>
             </div>
             <div className="mt-3">
               <Link href={`/property/${previewProperty.id}`}>
                 <Button className="w-full" data-testid="button-view-property">
-                  View Property
+                  Ver Propiedad
                 </Button>
               </Link>
             </div>

@@ -45,10 +45,11 @@ export default function BookingCard({ property }: BookingCardProps) {
   };
 
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('en-US', {
+    return new Intl.NumberFormat('es-CO', {
       style: 'currency',
-      currency: 'USD',
+      currency: 'COP',
       minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
     }).format(price);
   };
 
@@ -59,13 +60,13 @@ export default function BookingCard({ property }: BookingCardProps) {
           <span className="text-2xl font-bold text-foreground" data-testid="text-price-per-night">
             {formatPrice(parseFloat(property.pricePerNight))}
           </span>
-          <span className="text-muted-foreground">night</span>
+          <span className="text-muted-foreground">noche</span>
         </div>
         
         <div className="border border-border rounded-lg mb-4">
           <div className="grid grid-cols-2">
             <div className="border-r border-border p-3">
-              <Label className="text-xs font-medium text-muted-foreground">CHECK-IN</Label>
+              <Label className="text-xs font-medium text-muted-foreground">ENTRADA</Label>
               <Input
                 type="date"
                 value={checkIn}
@@ -75,7 +76,7 @@ export default function BookingCard({ property }: BookingCardProps) {
               />
             </div>
             <div className="p-3">
-              <Label className="text-xs font-medium text-muted-foreground">CHECKOUT</Label>
+              <Label className="text-xs font-medium text-muted-foreground">SALIDA</Label>
               <Input
                 type="date"
                 value={checkOut}
@@ -86,7 +87,7 @@ export default function BookingCard({ property }: BookingCardProps) {
             </div>
           </div>
           <div className="border-t border-border p-3">
-            <Label className="text-xs font-medium text-muted-foreground">GUESTS</Label>
+            <Label className="text-xs font-medium text-muted-foreground">HUÉSPEDES</Label>
             <Input
               type="number"
               min="1"
@@ -104,30 +105,30 @@ export default function BookingCard({ property }: BookingCardProps) {
           className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold py-3 mb-4"
           data-testid="button-reserve"
         >
-          Reserve
+          Reservar
         </Button>
 
         <p className="text-center text-sm text-muted-foreground mb-4">
-          You won't be charged yet
+          Aún no se te cobrará
         </p>
 
         <div className="space-y-3">
           <div className="flex justify-between">
             <span className="underline" data-testid="text-base-calculation">
-              {formatPrice(parseFloat(property.pricePerNight))} x {priceCalc.nights} nights
+              {formatPrice(parseFloat(property.pricePerNight))} x {priceCalc.nights} noches
             </span>
             <span data-testid="text-base-price">{formatPrice(priceCalc.basePrice)}</span>
           </div>
           <div className="flex justify-between">
-            <span className="underline">Cleaning fee</span>
+            <span className="underline">Tarifa de limpieza</span>
             <span data-testid="text-cleaning-fee">{formatPrice(priceCalc.cleaningFee)}</span>
           </div>
           <div className="flex justify-between">
-            <span className="underline">Service fee</span>
+            <span className="underline">Tarifa de servicio</span>
             <span data-testid="text-service-fee">{formatPrice(priceCalc.serviceFee)}</span>
           </div>
           <div className="flex justify-between">
-            <span className="underline">Taxes</span>
+            <span className="underline">Impuestos</span>
             <span data-testid="text-taxes">{formatPrice(priceCalc.taxes)}</span>
           </div>
           <Separator />

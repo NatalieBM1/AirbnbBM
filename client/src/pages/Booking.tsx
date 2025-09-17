@@ -159,10 +159,11 @@ export default function Booking() {
   const priceCalc = calculatePrice();
 
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('en-US', {
+    return new Intl.NumberFormat('es-CO', {
       style: 'currency',
-      currency: 'USD',
+      currency: 'COP',
       minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
     }).format(price);
   };
 
@@ -373,7 +374,7 @@ export default function Booking() {
                   <h4 className="font-medium text-foreground" data-testid="text-summary-title">
                     {property.title}
                   </h4>
-                  <p className="text-sm text-muted-foreground">Entire place</p>
+                  <p className="text-sm text-muted-foreground">Lugar completo</p>
                   <div className="flex items-center text-sm mt-1">
                     <Star className="h-4 w-4 fill-yellow-400 text-yellow-400 mr-1" />
                     <span>{property.rating} ({property.reviewCount})</span>
@@ -385,25 +386,25 @@ export default function Booking() {
               <div className="space-y-3 mb-6">
                 <div className="flex justify-between">
                   <span className="underline" data-testid="text-breakdown-base">
-                    {formatPrice(parseFloat(property.pricePerNight))} x {priceCalc.nights} nights
+                    {formatPrice(parseFloat(property.pricePerNight))} x {priceCalc.nights} noches
                   </span>
                   <span>{formatPrice(priceCalc.basePrice)}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="underline">Cleaning fee</span>
+                  <span className="underline">Tarifa de limpieza</span>
                   <span>{formatPrice(priceCalc.cleaningFee)}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="underline">Service fee</span>
+                  <span className="underline">Tarifa de servicio</span>
                   <span>{formatPrice(priceCalc.serviceFee)}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="underline">Taxes</span>
+                  <span className="underline">Impuestos</span>
                   <span>{formatPrice(priceCalc.taxes)}</span>
                 </div>
                 <Separator />
                 <div className="flex justify-between font-semibold text-lg">
-                  <span>Total (USD)</span>
+                  <span>Total (COP)</span>
                   <span data-testid="text-summary-total">{formatPrice(priceCalc.total)}</span>
                 </div>
               </div>
@@ -415,7 +416,7 @@ export default function Booking() {
                 disabled={createBookingMutation.isPending}
                 data-testid="button-confirm-booking"
               >
-                {createBookingMutation.isPending ? "Processing..." : "Confirm and pay"}
+                {createBookingMutation.isPending ? "Procesando..." : "Confirmar y pagar"}
               </Button>
 
               <p className="text-xs text-center text-muted-foreground mt-4">

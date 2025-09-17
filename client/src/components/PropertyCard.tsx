@@ -72,7 +72,7 @@ export default function PropertyCard({ property }: PropertyCardProps) {
           </p>
           
           <div className="flex items-center justify-between">
-            <span className="text-muted-foreground text-sm">Available</span>
+            <span className="text-muted-foreground text-sm">Disponible</span>
             <div>
               <span 
                 className="font-semibold" 
