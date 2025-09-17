@@ -3,9 +3,13 @@ import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Search, Globe, Menu, User, Home, Bell } from "lucide-react";
+import { Search, Globe, Menu, User, Home, Bell, Minus, Plus } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
+import { format } from "date-fns";
+import { es } from "date-fns/locale";
 
 interface NavbarProps {
   onSearch?: (query: string) => void;
@@ -15,46 +19,65 @@ export default function Navbar({ onSearch }: NavbarProps) {
   const [location, setLocation] = useLocation();
   const { user, isAuthenticated, logout } = useAuth();
   const [searchQuery, setSearchQuery] = useState("");
+  const [checkIn, setCheckIn] = useState<Date | undefined>();
+  const [checkOut, setCheckOut] = useState<Date | undefined>();
+  const [guests, setGuests] = useState(1);
   const [showSuggestions, setShowSuggestions] = useState(false);
 
-  // Common search suggestions
+  // Colombian destinations
   const searchSuggestions = [
-    'Malibu, California',
-    'Aspen, Colorado', 
-    'New York, NY',
-    'Miami Beach, Florida',
-    'San Francisco, California',
-    'Austin, Texas',
-    'Seattle, Washington',
-    'Portland, Oregon'
+    'Cartagena, Colombia',
+    'Medellín, Colombia',
+    'Bogotá, Colombia',
+    'Santa Marta, Colombia',
+    'Cali, Colombia',
+    'Pereira, Colombia',
+    'Manizales, Colombia',
+    'Barranquilla, Colombia'
   ];
 
   const filteredSuggestions = searchSuggestions.filter(location =>
     location.toLowerCase().includes(searchQuery.toLowerCase()) && searchQuery.length > 0
   );
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSearch = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    
+    const params = new URLSearchParams();
     if (searchQuery.trim()) {
+      params.set('search', searchQuery.trim());
       if (onSearch) {
         onSearch(searchQuery.trim());
       }
-      setShowSuggestions(false);
-      
-      // Navigate to home with search query
-      const params = new URLSearchParams({ search: searchQuery.trim() });
-      setLocation(`/?${params.toString()}`);
     }
+    if (checkIn) {
+      params.set('checkin', checkIn.toISOString().split('T')[0]);
+    }
+    if (checkOut) {
+      params.set('checkout', checkOut.toISOString().split('T')[0]);
+    }
+    if (guests > 1) {
+      params.set('guests', guests.toString());
+    }
+    
+    setShowSuggestions(false);
+    setLocation(params.toString() ? `/?${params.toString()}` : '/');
   };
 
   const handleSuggestionClick = (suggestion: string) => {
     setSearchQuery(suggestion);
     setShowSuggestions(false);
-    if (onSearch) {
-      onSearch(suggestion);
-    }
-    const params = new URLSearchParams({ search: suggestion });
-    setLocation(`/?${params.toString()}`);
+    handleSearch();
+  };
+
+  const formatDate = (date: Date | undefined) => {
+    if (!date) return "Agrega fecha...";
+    return format(date, "d MMM", { locale: es });
+  };
+
+  const formatGuests = (count: number) => {
+    if (count === 1) return "1 huésped";
+    return `${count} huéspedes`;
   };
 
   const handleLogout = () => {
@@ -72,49 +95,168 @@ export default function Navbar({ onSearch }: NavbarProps) {
             <span className="text-primary text-xl font-bold hidden sm:block">airbnbbm</span>
           </Link>
 
-          {/* Search Bar */}
-          <div className="flex-1 max-w-2xl mx-8 relative">
-            <form onSubmit={handleSearch}>
-              <div className="search-shadow bg-background border border-border rounded-full flex items-center hover:shadow-lg transition-shadow duration-200">
-                <Input
-                  type="text"
-                  placeholder="Where are you going?"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  onFocus={() => setShowSuggestions(true)}
-                  onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
-                  className="flex-1 border-0 bg-transparent px-6 py-3 rounded-l-full focus:ring-0"
-                  data-testid="input-search"
-                />
-                <Button 
-                  type="submit"
-                  size="icon"
-                  className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-full m-2"
-                  data-testid="button-search"
-                >
-                  <Search className="h-4 w-4" />
-                </Button>
-              </div>
-              
-              {/* Search Suggestions */}
-              {showSuggestions && filteredSuggestions.length > 0 && (
-                <div className="absolute top-full left-0 right-0 bg-background border border-border rounded-xl shadow-lg z-50 mt-2">
-                  {filteredSuggestions.map((suggestion, index) => (
-                    <div
-                      key={index}
-                      className="px-4 py-3 hover:bg-muted cursor-pointer border-b border-border last:border-b-0"
-                      onClick={() => handleSuggestionClick(suggestion)}
-                      data-testid={`search-suggestion-${index}`}
-                    >
-                      <div className="flex items-center space-x-3">
-                        <Search className="h-4 w-4 text-muted-foreground" />
-                        <span>{suggestion}</span>
-                      </div>
+          {/* Modern Search Bar */}
+          <div className="flex-1 max-w-4xl mx-8 relative">
+            <div className="bg-white rounded-full shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-200">
+              <div className="flex items-center divide-x divide-gray-200">
+                
+                {/* Destination */}
+                <div className="flex-1 min-w-0 px-6 py-3 relative">
+                  <label className="block text-xs font-semibold text-gray-900 mb-1">
+                    Dónde
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Explora destinos"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onFocus={() => setShowSuggestions(true)}
+                    onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
+                    className="w-full text-sm text-gray-600 placeholder-gray-400 bg-transparent border-none outline-none"
+                    data-testid="input-search"
+                  />
+                  
+                  {/* Search Suggestions */}
+                  {showSuggestions && filteredSuggestions.length > 0 && (
+                    <div className="absolute top-full left-0 right-0 bg-white border border-gray-200 rounded-xl shadow-xl z-50 mt-2">
+                      {filteredSuggestions.map((suggestion, index) => (
+                        <div
+                          key={index}
+                          className="px-4 py-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-b-0"
+                          onClick={() => handleSuggestionClick(suggestion)}
+                          data-testid={`search-suggestion-${index}`}
+                        >
+                          <div className="flex items-center space-x-3">
+                            <Search className="h-4 w-4 text-gray-400" />
+                            <span className="text-sm text-gray-700">{suggestion}</span>
+                          </div>
+                        </div>
+                      ))}
                     </div>
-                  ))}
+                  )}
                 </div>
-              )}
-            </form>
+
+                {/* Check-in */}
+                <div className="flex-1 min-w-0">
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <button 
+                        className="w-full px-6 py-3 text-left hover:bg-gray-50 rounded-none transition-colors"
+                        data-testid="button-checkin"
+                      >
+                        <div className="text-xs font-semibold text-gray-900 mb-1">
+                          Check-in
+                        </div>
+                        <div className="text-sm text-gray-600">
+                          {formatDate(checkIn)}
+                        </div>
+                      </button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={checkIn}
+                        onSelect={setCheckIn}
+                        disabled={(date) => date < new Date()}
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
+                </div>
+
+                {/* Check-out */}
+                <div className="flex-1 min-w-0">
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <button 
+                        className="w-full px-6 py-3 text-left hover:bg-gray-50 rounded-none transition-colors"
+                        data-testid="button-checkout"
+                      >
+                        <div className="text-xs font-semibold text-gray-900 mb-1">
+                          Check-out
+                        </div>
+                        <div className="text-sm text-gray-600">
+                          {formatDate(checkOut)}
+                        </div>
+                      </button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={checkOut}
+                        onSelect={setCheckOut}
+                        disabled={(date) => date < (checkIn || new Date())}
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
+                </div>
+
+                {/* Guests */}
+                <div className="flex-1 min-w-0">
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <button 
+                        className="w-full px-6 py-3 text-left hover:bg-gray-50 rounded-none transition-colors"
+                        data-testid="button-guests"
+                      >
+                        <div className="text-xs font-semibold text-gray-900 mb-1">
+                          Quién
+                        </div>
+                        <div className="text-sm text-gray-600">
+                          {formatGuests(guests)}
+                        </div>
+                      </button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-80 p-6" align="end">
+                      <div className="space-y-4">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <div className="font-medium text-gray-900">Adultos</div>
+                            <div className="text-sm text-gray-500">13 años o más</div>
+                          </div>
+                          <div className="flex items-center space-x-3">
+                            <Button
+                              variant="outline"
+                              size="icon"
+                              className="h-8 w-8 rounded-full"
+                              onClick={() => setGuests(Math.max(1, guests - 1))}
+                              disabled={guests <= 1}
+                            >
+                              <Minus className="h-4 w-4" />
+                            </Button>
+                            <span className="text-gray-900 font-medium w-8 text-center">
+                              {guests}
+                            </span>
+                            <Button
+                              variant="outline"
+                              size="icon"
+                              className="h-8 w-8 rounded-full"
+                              onClick={() => setGuests(Math.min(16, guests + 1))}
+                              disabled={guests >= 16}
+                            >
+                              <Plus className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    </PopoverContent>
+                  </Popover>
+                </div>
+
+                {/* Search Button */}
+                <div className="px-2 py-2">
+                  <Button
+                    onClick={() => handleSearch()}
+                    size="icon"
+                    className="bg-rose-500 hover:bg-rose-600 text-white rounded-full h-12 w-12"
+                    data-testid="button-search"
+                  >
+                    <Search className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* User Menu */}
