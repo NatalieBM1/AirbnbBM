@@ -72,12 +72,13 @@ export default function Navbar({ onSearch }: NavbarProps) {
 
   const formatDate = (date: Date | undefined) => {
     if (!date) return "Agrega fecha...";
-    return format(date, "d MMM", { locale: es });
+    return format(date, "d 'de' MMM", { locale: es });
   };
 
   const formatGuests = (count: number) => {
     if (count === 1) return "1 huésped";
-    return `${count} huéspedes`;
+    if (count <= 6) return `${count} huéspedes`;
+    return `${count}+ huéspedes`;
   };
 
   const handleLogout = () => {
@@ -96,12 +97,12 @@ export default function Navbar({ onSearch }: NavbarProps) {
           </Link>
 
           {/* Modern Search Bar */}
-          <div className="flex-1 max-w-4xl mx-8 relative">
-            <div className="bg-white rounded-full shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-200">
-              <div className="flex items-center divide-x divide-gray-200">
+          <div className="flex-1 max-w-5xl mx-8 relative">
+            <div className="bg-white rounded-full shadow-md border border-gray-300 hover:shadow-lg transition-all duration-300">
+              <div className="flex items-center divide-x divide-gray-300">
                 
                 {/* Destination */}
-                <div className="flex-1 min-w-0 px-6 py-3 relative">
+                <div className="flex-1 min-w-0 px-7 py-4 relative">
                   <label className="block text-xs font-semibold text-gray-900 mb-1">
                     Dónde
                   </label>
@@ -112,23 +113,23 @@ export default function Navbar({ onSearch }: NavbarProps) {
                     onChange={(e) => setSearchQuery(e.target.value)}
                     onFocus={() => setShowSuggestions(true)}
                     onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
-                    className="w-full text-sm text-gray-600 placeholder-gray-400 bg-transparent border-none outline-none"
+                    className="w-full text-sm text-gray-700 placeholder-gray-500 bg-transparent border-none outline-none font-medium"
                     data-testid="input-search"
                   />
                   
                   {/* Search Suggestions */}
                   {showSuggestions && filteredSuggestions.length > 0 && (
-                    <div className="absolute top-full left-0 right-0 bg-white border border-gray-200 rounded-xl shadow-xl z-50 mt-2">
+                    <div className="absolute top-full left-0 right-0 bg-white border border-gray-200 rounded-2xl shadow-2xl z-50 mt-3">
                       {filteredSuggestions.map((suggestion, index) => (
                         <div
                           key={index}
-                          className="px-4 py-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-b-0"
+                          className="px-5 py-4 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-b-0 first:rounded-t-2xl last:rounded-b-2xl transition-colors duration-200"
                           onClick={() => handleSuggestionClick(suggestion)}
                           data-testid={`search-suggestion-${index}`}
                         >
-                          <div className="flex items-center space-x-3">
+                          <div className="flex items-center space-x-4">
                             <Search className="h-4 w-4 text-gray-400" />
-                            <span className="text-sm text-gray-700">{suggestion}</span>
+                            <span className="text-sm text-gray-800 font-medium">{suggestion}</span>
                           </div>
                         </div>
                       ))}
@@ -141,13 +142,13 @@ export default function Navbar({ onSearch }: NavbarProps) {
                   <Popover>
                     <PopoverTrigger asChild>
                       <button 
-                        className="w-full px-6 py-3 text-left hover:bg-gray-50 rounded-none transition-colors"
+                        className="w-full px-7 py-4 text-left hover:bg-gray-50 rounded-none transition-colors"
                         data-testid="button-checkin"
                       >
                         <div className="text-xs font-semibold text-gray-900 mb-1">
                           Check-in
                         </div>
-                        <div className="text-sm text-gray-600">
+                        <div className="text-sm text-gray-700 font-medium">
                           {formatDate(checkIn)}
                         </div>
                       </button>
@@ -169,13 +170,13 @@ export default function Navbar({ onSearch }: NavbarProps) {
                   <Popover>
                     <PopoverTrigger asChild>
                       <button 
-                        className="w-full px-6 py-3 text-left hover:bg-gray-50 rounded-none transition-colors"
+                        className="w-full px-7 py-4 text-left hover:bg-gray-50 rounded-none transition-colors"
                         data-testid="button-checkout"
                       >
                         <div className="text-xs font-semibold text-gray-900 mb-1">
                           Check-out
                         </div>
-                        <div className="text-sm text-gray-600">
+                        <div className="text-sm text-gray-700 font-medium">
                           {formatDate(checkOut)}
                         </div>
                       </button>
@@ -197,13 +198,13 @@ export default function Navbar({ onSearch }: NavbarProps) {
                   <Popover>
                     <PopoverTrigger asChild>
                       <button 
-                        className="w-full px-6 py-3 text-left hover:bg-gray-50 rounded-none transition-colors"
+                        className="w-full px-7 py-4 text-left hover:bg-gray-50 rounded-none transition-colors"
                         data-testid="button-guests"
                       >
                         <div className="text-xs font-semibold text-gray-900 mb-1">
                           Quién
                         </div>
-                        <div className="text-sm text-gray-600">
+                        <div className="text-sm text-gray-700 font-medium">
                           {formatGuests(guests)}
                         </div>
                       </button>
@@ -245,14 +246,14 @@ export default function Navbar({ onSearch }: NavbarProps) {
                 </div>
 
                 {/* Search Button */}
-                <div className="px-2 py-2">
+                <div className="px-3 py-3">
                   <Button
                     onClick={() => handleSearch()}
                     size="icon"
-                    className="bg-rose-500 hover:bg-rose-600 text-white rounded-full h-12 w-12"
+                    className="bg-rose-500 hover:bg-rose-600 text-white rounded-full h-14 w-14 shadow-lg hover:shadow-xl transition-all duration-200"
                     data-testid="button-search"
                   >
-                    <Search className="h-4 w-4" />
+                    <Search className="h-5 w-5" />
                   </Button>
                 </div>
               </div>
