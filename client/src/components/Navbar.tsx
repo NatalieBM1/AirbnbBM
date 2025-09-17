@@ -263,7 +263,7 @@ export default function Navbar({ onSearch }: NavbarProps) {
           {/* User Menu */}
           <div className="flex items-center space-x-4">
             <Button variant="ghost" className="text-foreground hover:bg-muted">
-              Airbnb your home
+              Aloja tu hogar
             </Button>
             
             <Button variant="ghost" size="icon" className="text-muted-foreground">
@@ -295,29 +295,29 @@ export default function Navbar({ onSearch }: NavbarProps) {
                     <DropdownMenuItem asChild>
                       <Link href="/notifications" data-testid="link-notifications">
                         <Bell className="mr-2 h-4 w-4" />
-                        Notifications
+                        Notificaciones
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem>
-                      <span>Account</span>
+                      <span>Cuenta</span>
                     </DropdownMenuItem>
                     <DropdownMenuItem>
-                      <span>Host your home</span>
+                      <span>Aloja tu hogar</span>
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={handleLogout} data-testid="button-logout">
-                      <span>Log out</span>
+                      <span>Cerrar sesión</span>
                     </DropdownMenuItem>
                   </>
                 ) : (
                   <>
                     <DropdownMenuItem asChild>
-                      <Link href="/login" data-testid="link-login">Log in</Link>
+                      <Link href="/login" data-testid="link-login">Iniciar sesión</Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
-                      <Link href="/register" data-testid="link-register">Sign up</Link>
+                      <Link href="/register" data-testid="link-register">Registrarse</Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem>
-                      <span>Host your home</span>
+                      <span>Aloja tu hogar</span>
                     </DropdownMenuItem>
                   </>
                 )}
