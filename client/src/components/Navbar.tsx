@@ -97,12 +97,12 @@ export default function Navbar({ onSearch }: NavbarProps) {
           </Link>
 
           {/* Modern Search Bar */}
-          <div className="flex-1 max-w-5xl mx-8 relative">
-            <div className="bg-white rounded-full shadow-md border border-gray-300 hover:shadow-lg transition-all duration-300">
-              <div className="flex items-center divide-x divide-gray-300">
+          <div className="flex-1 max-w-3xl mx-6 relative">
+            <div className="bg-white rounded-full shadow-sm border border-gray-200 hover:shadow-md transition-all duration-300">
+              <div className="flex items-center divide-x divide-gray-200">
                 
                 {/* Destination */}
-                <div className="flex-1 min-w-0 px-7 py-4 relative">
+                <div className="flex-1 min-w-0 px-5 py-3 relative">
                   <label className="block text-xs font-semibold text-gray-900 mb-1">
                     Dónde
                   </label>
@@ -142,7 +142,7 @@ export default function Navbar({ onSearch }: NavbarProps) {
                   <Popover>
                     <PopoverTrigger asChild>
                       <button 
-                        className="w-full px-7 py-4 text-left hover:bg-gray-50 rounded-none transition-colors"
+                        className="w-full px-5 py-3 text-left hover:bg-gray-50 rounded-none transition-colors"
                         data-testid="button-checkin"
                       >
                         <div className="text-xs font-semibold text-gray-900 mb-1">
@@ -170,7 +170,7 @@ export default function Navbar({ onSearch }: NavbarProps) {
                   <Popover>
                     <PopoverTrigger asChild>
                       <button 
-                        className="w-full px-7 py-4 text-left hover:bg-gray-50 rounded-none transition-colors"
+                        className="w-full px-5 py-3 text-left hover:bg-gray-50 rounded-none transition-colors"
                         data-testid="button-checkout"
                       >
                         <div className="text-xs font-semibold text-gray-900 mb-1">
@@ -198,7 +198,7 @@ export default function Navbar({ onSearch }: NavbarProps) {
                   <Popover>
                     <PopoverTrigger asChild>
                       <button 
-                        className="w-full px-7 py-4 text-left hover:bg-gray-50 rounded-none transition-colors"
+                        className="w-full px-5 py-3 text-left hover:bg-gray-50 rounded-none transition-colors"
                         data-testid="button-guests"
                       >
                         <div className="text-xs font-semibold text-gray-900 mb-1">
@@ -246,14 +246,14 @@ export default function Navbar({ onSearch }: NavbarProps) {
                 </div>
 
                 {/* Search Button */}
-                <div className="px-3 py-3">
+                <div className="px-2 py-2">
                   <Button
                     onClick={() => handleSearch()}
                     size="icon"
-                    className="bg-rose-500 hover:bg-rose-600 text-white rounded-full h-14 w-14 shadow-lg hover:shadow-xl transition-all duration-200"
+                    className="bg-rose-500 hover:bg-rose-600 text-white rounded-full h-10 w-10 shadow-md hover:shadow-lg transition-all duration-200"
                     data-testid="button-search"
                   >
-                    <Search className="h-5 w-5" />
+                    <Search className="h-4 w-4" />
                   </Button>
                 </div>
               </div>
