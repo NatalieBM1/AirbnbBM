@@ -284,7 +284,7 @@ export class MemStorage implements IStorage {
         bedrooms: 1,
         bathrooms: 1,
         images: [
-          "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600",
+          "https://images.unsplash.com/photo-1571896349842-33c89424de2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600",
         ],
         amenities: ["Beach Access", "WiFi", "AC", "Ocean View", "Minibar"],
         hostId: "host-1",
