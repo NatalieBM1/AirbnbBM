@@ -195,7 +195,7 @@ export default function Home() {
               data-testid="grid-view-btn"
             >
               <LayoutGrid className="h-4 w-4" />
-              <span>Grid</span>
+              <span>Lista</span>
             </Button>
             <Button
               variant={currentView === 'map' ? 'default' : 'outline'}
@@ -204,12 +204,12 @@ export default function Home() {
               data-testid="map-view-btn"
             >
               <Map className="h-4 w-4" />
-              <span>Map</span>
+              <span>Mapa</span>
             </Button>
           </div>
           
           <div className="text-sm text-muted-foreground">
-            {filteredProperties.length} stays available
+            {filteredProperties.length} propiedades disponibles
             {searchQuery && ` for "${searchQuery}"`}
           </div>
         </div>
@@ -220,7 +220,7 @@ export default function Home() {
           <div className="flex flex-wrap gap-2 mb-6">
             {searchQuery && (
               <div className="bg-primary text-primary-foreground px-3 py-1 rounded-full text-sm flex items-center space-x-2">
-                <span>Search: "{searchQuery}"</span>
+                <span>Búsqueda: "{searchQuery}"</span>
                 <button 
                   onClick={() => setSearchQuery('')}
                   className="hover:bg-primary-foreground/20 rounded-full p-0.5"
@@ -232,7 +232,7 @@ export default function Home() {
             )}
             {filters.propertyType !== 'all' && (
               <div className="bg-secondary text-secondary-foreground px-3 py-1 rounded-full text-sm flex items-center space-x-2">
-                <span>Type: {filters.propertyType}</span>
+                <span>Tipo: {filters.propertyType}</span>
                 <button 
                   onClick={() => setFilters({...filters, propertyType: 'all'})}
                   className="hover:bg-secondary-foreground/20 rounded-full p-0.5"
@@ -244,7 +244,7 @@ export default function Home() {
             )}
             {filters.priceRange[1] < 1000 && (
               <div className="bg-secondary text-secondary-foreground px-3 py-1 rounded-full text-sm flex items-center space-x-2">
-                <span>Max: ${filters.priceRange[1]}</span>
+                <span>Máximo: ${filters.priceRange[1]}</span>
                 <button 
                   onClick={() => setFilters({...filters, priceRange: [0, 1000]})}
                   className="hover:bg-secondary-foreground/20 rounded-full p-0.5"
@@ -256,7 +256,7 @@ export default function Home() {
             )}
             {filters.guests && (
               <div className="bg-secondary text-secondary-foreground px-3 py-1 rounded-full text-sm flex items-center space-x-2">
-                <span>Guests: {filters.guests}+</span>
+                <span>Huéspedes: {filters.guests}+</span>
                 <button 
                   onClick={() => setFilters({...filters, guests: ''})}
                   className="hover:bg-secondary-foreground/20 rounded-full p-0.5"
@@ -268,7 +268,7 @@ export default function Home() {
             )}
             {filters.bedrooms && (
               <div className="bg-secondary text-secondary-foreground px-3 py-1 rounded-full text-sm flex items-center space-x-2">
-                <span>Bedrooms: {filters.bedrooms}+</span>
+                <span>Habitaciones: {filters.bedrooms}+</span>
                 <button 
                   onClick={() => setFilters({...filters, bedrooms: ''})}
                   className="hover:bg-secondary-foreground/20 rounded-full p-0.5"
@@ -305,7 +305,7 @@ export default function Home() {
               }}
               data-testid="clear-all-filters"
             >
-              Clear all
+              Limpiar todo
             </Button>
           </div>
         )}
