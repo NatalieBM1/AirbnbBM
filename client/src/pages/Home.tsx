@@ -4,7 +4,6 @@ import { useLocation } from "wouter";
 import { propertyApi } from "@/services/api";
 import PropertyCard from "@/components/PropertyCard";
 import FilterBar from "@/components/FilterBar";
-import SearchBar from "@/components/SearchBar";
 import MapView from "@/components/MapView";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -22,8 +21,6 @@ export default function Home() {
   const [location] = useLocation();
   const [currentView, setCurrentView] = useState<'grid' | 'map'>('grid');
   const [searchQuery, setSearchQuery] = useState('');
-  const [checkInDate, setCheckInDate] = useState<Date | undefined>();
-  const [checkOutDate, setCheckOutDate] = useState<Date | undefined>();
   const [selectedProperty, setSelectedProperty] = useState<any>(null);
   const [filters, setFilters] = useState<Filters>({
     priceRange: [0, 1000],
@@ -38,25 +35,13 @@ export default function Home() {
     queryFn: () => propertyApi.getProperties(),
   });
 
-  // Get search parameters from URL - reactive to location changes
+  // Get search query from URL - reactive to location changes
   useEffect(() => {
     const urlPart = location.split('?')[1] || '';
     const urlParams = new URLSearchParams(urlPart);
     const search = urlParams.get('search') || '';
-    const checkin = urlParams.get('checkin');
-    const checkout = urlParams.get('checkout');
-    
     setSearchQuery(search);
-    setCheckInDate(checkin ? new Date(checkin) : undefined);
-    setCheckOutDate(checkout ? new Date(checkout) : undefined);
   }, [location]);
-
-  // Handle search from SearchBar
-  const handleSearch = (query: string, checkIn?: Date, checkOut?: Date) => {
-    setSearchQuery(query);
-    setCheckInDate(checkIn);
-    setCheckOutDate(checkOut);
-  };
 
   // Filter properties based on search and filters
   const filteredProperties = data?.properties?.filter((property: any) => {
@@ -197,11 +182,6 @@ export default function Home() {
 
   return (
     <main data-testid="home-page">
-      {/* Search Bar */}
-      <div className="bg-white border-b border-gray-100">
-        <SearchBar onSearch={handleSearch} />
-      </div>
-
       <FilterBar filters={filters} onChange={setFilters} resultsCount={filteredProperties.length} />
       
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
