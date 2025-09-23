@@ -81,14 +81,7 @@ export default function FilterBar({ filters, onChange, resultsCount = 0 }: Filte
               />
             )}
             
-            <Link href="/map">
-              <button className="flex items-center space-x-2 px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-all duration-200"
-                data-testid="button-show-map"
-              >
-                <Map className="h-4 w-4" />
-                <span className="text-sm font-medium">Mapa</span>
-              </button>
-            </Link>
+            {/* Botón de mapa eliminado, solo se muestra el filtro */}
           </div>
         </div>
       </div>

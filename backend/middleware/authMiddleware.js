@@ -1,5 +1,5 @@
-// Simple JWT-like authentication middleware
-// In production, use proper JWT verification
+// Middleware de autenticación tipo JWT simple
+// En producción, usa verificación JWT adecuada
 
 const authMiddleware = (req, res, next) => {
   try {
@@ -15,7 +15,7 @@ const authMiddleware = (req, res, next) => {
       return res.status(401).json({ message: 'Access token required' });
     }
 
-    // Simple token validation (in production, verify JWT properly)
+    // Validación simple de token (en producción, verifica JWT correctamente)
     if (token.startsWith('fake-jwt-token-')) {
       const userId = token.replace('fake-jwt-token-', '');
       req.user = { userId };

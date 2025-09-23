@@ -19,25 +19,25 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Routes
+// Rutas
 app.use('/api/auth', authRoutes);
 app.use('/api/properties', propertyRoutes);
 app.use('/api/bookings', bookingRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/payments', paymentRoutes);
 
-// Health check endpoint
+// Endpoint de verificación de salud
 app.get('/health', (req, res) => {
   res.json({ status: 'ok' });
 });
 
-// Error handling middleware
+// Middleware de manejo de errores
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ message: 'Something went wrong!' });
 });
 
-// 404 handler
+// Manejador de rutas 404
 app.use('*', (req, res) => {
   res.status(404).json({ message: 'Route not found' });
 });

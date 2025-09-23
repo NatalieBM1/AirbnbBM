@@ -4,11 +4,11 @@ const authMiddleware = require('../middleware/authMiddleware');
 
 const router = express.Router();
 
-// Public routes
+// Rutas públicas
 router.post('/register', register);
 router.post('/login', login);
 
-// Protected routes
+// Rutas protegidas
 router.get('/me', authMiddleware, getProfile);
 
 module.exports = router;

@@ -2,12 +2,12 @@ import axios from 'axios';
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE || 'http://127.0.0.1:4000/api';
 
-// Create axios instance
+// Crear instancia de axios
 const api = axios.create({
   baseURL: API_BASE_URL,
 });
 
-// Add auth token to requests if available
+// Añadir token de autenticación a las solicitudes si está disponible
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('airbnb_token');
   if (token) {
@@ -16,7 +16,7 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// Auth API
+// API de autenticación
 export const login = async (credentials) => {
   const response = await api.post('/auth/login', credentials);
   return response.data;
@@ -32,7 +32,7 @@ export const getProfile = async () => {
   return response.data;
 };
 
-// Properties API
+// API de propiedades
 export const getProperties = async (params = {}) => {
   const response = await api.get('/properties', { params });
   return response.data;
@@ -48,7 +48,7 @@ export const createProperty = async (propertyData) => {
   return response.data;
 };
 
-// Bookings API
+// API de reservas
 export const getBookings = async () => {
   const response = await api.get('/bookings');
   return response.data;
@@ -69,7 +69,7 @@ export const cancelBooking = async (id) => {
   return response.data;
 };
 
-// Notifications API
+// API de notificaciones
 export const getNotifications = async () => {
   const response = await api.get('/notifications');
   return response.data;
@@ -80,7 +80,7 @@ export const markNotificationAsRead = async (id) => {
   return response.data;
 };
 
-// Payments API
+// API de pagos
 export const getPayments = async () => {
   const response = await api.get('/payments');
   return response.data;

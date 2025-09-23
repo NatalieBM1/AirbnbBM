@@ -10,11 +10,11 @@ const authMiddleware = require('../middleware/authMiddleware');
 
 const router = express.Router();
 
-// Public routes
+// Rutas públicas
 router.get('/', getAllProperties);
 router.get('/:id', getPropertyById);
 
-// Protected routes (require authentication)
+// Rutas protegidas (requieren autenticación)
 router.post('/', authMiddleware, createProperty);
 router.put('/:id', authMiddleware, updateProperty);
 router.delete('/:id', authMiddleware, deleteProperty);

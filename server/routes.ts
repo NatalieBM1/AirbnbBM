@@ -7,7 +7,7 @@ import jwt from "jsonwebtoken";
 
 const JWT_SECRET = process.env.SESSION_SECRET || "fallback-secret-key";
 
-// Middleware to verify JWT token
+// Middleware para verificar el token JWT
 const authenticateToken = (req: any, res: any, next: any) => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
@@ -26,26 +26,26 @@ const authenticateToken = (req: any, res: any, next: any) => {
 };
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Health check
+  // Verificación de salud
   app.get("/api/health", (req, res) => {
     res.json({ status: "ok" });
   });
 
-  // Auth routes
+  // Rutas de autenticación
   app.post("/api/auth/register", async (req, res) => {
     try {
       const userData = registerSchema.parse(req.body);
       
-      // Check if user already exists
+  // Verificar si el usuario ya existe
       const existingUser = await storage.getUserByEmail(userData.email);
       if (existingUser) {
         return res.status(400).json({ message: "User already exists with this email" });
       }
 
-      // Hash password
+  // Hashear la contraseña
       const hashedPassword = await bcrypt.hash(userData.password, 10);
       
-      // Create user
+  // Crear usuario
       const user = await storage.createUser({
         email: userData.email,
         password: hashedPassword,
@@ -54,14 +54,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
         phone: userData.phone,
       });
 
-      // Generate JWT token
+  // Generar token JWT
       const token = jwt.sign(
         { userId: user.id, email: user.email },
         JWT_SECRET,
         { expiresIn: '24h' }
       );
 
-      // Create welcome notification
+  // Crear notificación de bienvenida
       await storage.createNotification({
         userId: user.id,
         title: "¡Bienvenido a AIRBNBBM!",
@@ -81,26 +81,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { email, password } = loginSchema.parse(req.body);
       
-      // Find user
+  // Buscar usuario
       const user = await storage.getUserByEmail(email);
       if (!user) {
         return res.status(400).json({ message: "Invalid email or password" });
       }
 
-      // Verify password
+  // Verificar contraseña
       const isValidPassword = await bcrypt.compare(password, user.password);
       if (!isValidPassword) {
         return res.status(400).json({ message: "Invalid email or password" });
       }
 
-      // Generate JWT token
+  // Generar token JWT
       const token = jwt.sign(
         { userId: user.id, email: user.email },
         JWT_SECRET,
         { expiresIn: '24h' }
       );
 
-      // Create login notification
+  // Crear notificación de inicio de sesión
       await storage.createNotification({
         userId: user.id,
         title: "¡Bienvenido de vuelta!",
@@ -131,7 +131,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Property routes
+  // Rutas de propiedades
   app.get("/api/properties", async (req, res) => {
     try {
       const limit = parseInt(req.query.limit as string) || 20;
@@ -158,7 +158,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Booking routes
+  // Rutas de reservas
   app.post("/api/bookings", authenticateToken, async (req: any, res) => {
     try {
       const bookingData = insertBookingSchema.parse({
@@ -166,16 +166,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
         guestId: req.user.userId,
       });
 
-      // Verify property exists
+  // Verificar que la propiedad existe
       const property = await storage.getProperty(bookingData.propertyId);
       if (!property) {
         return res.status(404).json({ message: "Property not found" });
       }
 
-      // Create booking
+  // Crear reserva
       const booking = await storage.createBooking(bookingData);
 
-      // Create booking confirmation notification
+  // Crear notificación de confirmación de reserva
       await storage.createNotification({
         userId: req.user.userId,
         title: "Booking confirmed!",
@@ -207,7 +207,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ message: "Booking not found" });
       }
 
-      // Check if user owns this booking
+  // Verificar si el usuario es dueño de la reserva
       if (booking.guestId !== req.user.userId) {
         return res.status(403).json({ message: "Access denied" });
       }
@@ -219,7 +219,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Notification routes
+  // Rutas de notificaciones
   app.get("/api/notifications", authenticateToken, async (req: any, res) => {
     try {
       const notifications = await storage.getNotificationsByUser(req.user.userId);
@@ -243,28 +243,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Payment routes
+  // Rutas de pagos
   app.post("/api/payments", authenticateToken, async (req: any, res) => {
     try {
       const paymentData = insertPaymentSchema.parse(req.body);
 
-      // Verify booking exists and belongs to user
+  // Verificar que la reserva existe y pertenece al usuario
       const booking = await storage.getBooking(paymentData.bookingId);
       if (!booking || booking.guestId !== req.user.userId) {
         return res.status(404).json({ message: "Booking not found" });
       }
 
-      // Create payment
+  // Crear pago
       const payment = await storage.createPayment({
         ...paymentData,
-        status: "completed", // Simulate successful payment
+  status: "completed", // Simular pago exitoso
         transactionId: `txn_${Date.now()}`,
       });
 
-      // Update booking status
+  // Actualizar estado de la reserva
       await storage.updateBooking(booking.id, { status: "confirmed" });
 
-      // Create payment notification
+  // Crear notificación de pago
       await storage.createNotification({
         userId: req.user.userId,
         title: "Payment processed",
@@ -281,7 +281,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get("/api/payments/booking/:bookingId", authenticateToken, async (req: any, res) => {
     try {
-      // Verify booking belongs to user
+  // Verificar que la reserva pertenece al usuario
       const booking = await storage.getBooking(req.params.bookingId);
       if (!booking || booking.guestId !== req.user.userId) {
         return res.status(404).json({ message: "Booking not found" });

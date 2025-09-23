@@ -11,7 +11,7 @@ const authMiddleware = require('../middleware/authMiddleware');
 
 const router = express.Router();
 
-// All payment routes require authentication
+// Todas las rutas de pagos requieren autenticación
 router.use(authMiddleware);
 
 router.get('/', getAllPayments);

@@ -1,4 +1,4 @@
-// Temporary storage for users (in production, use a database)
+// Almacenamiento temporal de usuarios (en producción, usa una base de datos)
 let users = [
   {
     id: '1',
@@ -24,17 +24,18 @@ const register = async (req, res) => {
   try {
     const { email, password, firstName, lastName, phone } = req.body;
     
-    // Check if user already exists
+    // Verifica si el usuario ya existe
     const existingUser = users.find(user => user.email === email);
     if (existingUser) {
       return res.status(400).json({ message: 'User already exists with this email' });
     }
 
-    // Create new user
+    // Crea un nuevo usuario
     const newUser = {
       id: Date.now().toString(),
       email,
-      password: password, // In production, hash this password
+      password: password, 
+      // En producción, hashea esta contraseña
       firstName,
       lastName,
       phone: phone || null,
@@ -43,7 +44,7 @@ const register = async (req, res) => {
 
     users.push(newUser);
 
-    // Return user without password
+    // Devuelve el usuario sin la contraseña
     const { password: _, ...userWithoutPassword } = newUser;
     res.status(201).json({ 
       message: 'User registered successfully',
@@ -59,18 +60,18 @@ const login = async (req, res) => {
   try {
     const { email, password } = req.body;
     
-    // Find user
+    // Busca el usuario
     const user = users.find(u => u.email === email);
     if (!user) {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
-    // Check password (in production, use bcrypt)
+    // Verifica la contraseña (en producción, usa bcrypt)
     if (user.password !== password) {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
-    // Return user without password
+    // Devuelve el usuario sin la contraseña
     const { password: _, ...userWithoutPassword } = user;
     res.json({ 
       message: 'Login successful',
@@ -84,7 +85,7 @@ const login = async (req, res) => {
 
 const getProfile = async (req, res) => {
   try {
-    // In production, get user ID from JWT token
+    // En producción, obtén el ID de usuario desde el token JWT
     const userId = req.user?.userId || '1';
     const user = users.find(u => u.id === userId);
     

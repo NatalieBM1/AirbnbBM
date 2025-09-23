@@ -10,7 +10,7 @@ const authMiddleware = require('../middleware/authMiddleware');
 
 const router = express.Router();
 
-// All booking routes require authentication
+// Todas las rutas de reservas requieren autenticación
 router.use(authMiddleware);
 
 router.get('/', getAllBookings);

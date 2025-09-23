@@ -43,7 +43,7 @@ export const bookings = pgTable("bookings", {
   checkOut: timestamp("check_out").notNull(),
   guests: integer("guests").notNull(),
   totalAmount: decimal("total_amount", { precision: 10, scale: 2 }).notNull(),
-  status: text("status").notNull().default("pending"), // pending, confirmed, cancelled, completed
+  status: text("status").notNull().default("pending"), // pendiente, confirmado, cancelado, completado
   specialRequests: text("special_requests"),
   createdAt: timestamp("created_at").defaultNow(),
 });
@@ -53,7 +53,7 @@ export const notifications = pgTable("notifications", {
   userId: varchar("user_id").references(() => users.id).notNull(),
   title: text("title").notNull(),
   message: text("message").notNull(),
-  type: text("type").notNull(), // booking, payment, message, security, recommendation
+  type: text("type").notNull(), // reserva, pago, mensaje, seguridad, recomendación
   isRead: boolean("is_read").default(false),
   createdAt: timestamp("created_at").defaultNow(),
 });
@@ -63,12 +63,12 @@ export const payments = pgTable("payments", {
   bookingId: varchar("booking_id").references(() => bookings.id).notNull(),
   amount: decimal("amount", { precision: 10, scale: 2 }).notNull(),
   paymentMethod: text("payment_method").notNull(),
-  status: text("status").notNull().default("pending"), // pending, completed, failed, refunded
+  status: text("status").notNull().default("pending"), // pendiente, completado, fallido, reembolsado
   transactionId: text("transaction_id"),
   createdAt: timestamp("created_at").defaultNow(),
 });
 
-// Insert schemas
+// Insertar esquemas
 export const insertUserSchema = createInsertSchema(users).omit({
   id: true,
   createdAt: true,
@@ -96,7 +96,7 @@ export const insertPaymentSchema = createInsertSchema(payments).omit({
   createdAt: true,
 });
 
-// Types
+// Tipos
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
 export type InsertProperty = z.infer<typeof insertPropertySchema>;
@@ -108,7 +108,7 @@ export type Notification = typeof notifications.$inferSelect;
 export type InsertPayment = z.infer<typeof insertPaymentSchema>;
 export type Payment = typeof payments.$inferSelect;
 
-// Login schema
+// Esquema de inicio de sesión
 export const loginSchema = z.object({
   email: z.string().email("Invalid email address"),
   password: z.string().min(6, "Password must be at least 6 characters"),
@@ -116,7 +116,7 @@ export const loginSchema = z.object({
 
 export type LoginData = z.infer<typeof loginSchema>;
 
-// Extended registration schema
+// Esquema de registro extendido
 export const registerSchema = insertUserSchema.extend({
   confirmPassword: z.string(),
 }).refine((data) => data.password === data.confirmPassword, {

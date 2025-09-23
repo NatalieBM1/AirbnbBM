@@ -1,9 +1,9 @@
-// Sample bookings data
+// Datos de reservas de ejemplo
 let bookings = [];
 
 const getAllBookings = async (req, res) => {
   try {
-    const userId = req.user?.userId || '2'; // In production, get from JWT
+    const userId = req.user?.userId || '2'; // En producción, obtener desde JWT
     const userBookings = bookings.filter(b => b.guestId === userId);
     
     res.json({ 
@@ -36,7 +36,7 @@ const createBooking = async (req, res) => {
     const newBooking = {
       id: 'booking-' + Date.now(),
       propertyId,
-      guestId: req.user?.userId || '2', // In production, get from JWT
+      guestId: req.user?.userId || '2', // En producción, obtener desde JWT
       checkIn: new Date(checkIn),
       checkOut: new Date(checkOut),
       guests,

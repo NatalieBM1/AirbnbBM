@@ -1,4 +1,4 @@
-// Sample properties data
+// Datos de propiedades de ejemplo
 let properties = [
   {
     id: 'prop-1',
@@ -111,7 +111,7 @@ const createProperty = async (req, res) => {
       bathrooms,
       amenities: amenities || [],
       images: images || [],
-      hostId: req.user?.userId || '1', // In production, get from JWT
+      hostId: req.user?.userId || '1', // En producción, obtener desde JWT
       rating: '0',
       reviewCount: 0,
       isActive: true,
@@ -150,7 +150,7 @@ const deleteProperty = async (req, res) => {
       return res.status(404).json({ message: 'Property not found' });
     }
     
-    properties[propertyIndex].isActive = false; // Soft delete
+    properties[propertyIndex].isActive = false; // Eliminación suave
     res.json({ message: 'Property deleted successfully' });
   } catch (error) {
     res.status(500).json({ message: 'Failed to delete property', error: error.message });

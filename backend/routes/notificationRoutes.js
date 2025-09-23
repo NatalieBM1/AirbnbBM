@@ -9,7 +9,7 @@ const authMiddleware = require('../middleware/authMiddleware');
 
 const router = express.Router();
 
-// All notification routes require authentication
+// Todas las rutas de notificaciones requieren autenticación
 router.use(authMiddleware);
 
 router.get('/', getAllNotifications);

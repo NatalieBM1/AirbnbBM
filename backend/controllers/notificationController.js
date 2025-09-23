@@ -1,4 +1,4 @@
-// Sample notifications data
+// Datos de notificaciones de ejemplo
 let notifications = [
   {
     id: 'notif-1',
@@ -16,13 +16,13 @@ let notifications = [
     message: 'Your payment of $897.00 has been processed successfully.',
     type: 'payment',
     isRead: false,
-    createdAt: new Date(Date.now() - 86400000).toISOString() // 1 day ago
+    createdAt: new Date(Date.now() - 86400000).toISOString() // Hace 1 día
   }
 ];
 
 const getAllNotifications = async (req, res) => {
   try {
-    const userId = req.user?.userId || '2'; // In production, get from JWT
+    const userId = req.user?.userId || '2'; // En producción, obtener desde JWT
     const userNotifications = notifications
       .filter(n => n.userId === userId)
       .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));

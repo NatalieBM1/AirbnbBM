@@ -3,7 +3,7 @@ import { Property } from "@shared/schema";
 import { ZoomIn, ZoomOut, RotateCcw, Maximize } from "lucide-react";
 import L from 'leaflet';
 
-// Import Leaflet CSS
+// Importar CSS de Leaflet
 import 'leaflet/dist/leaflet.css';
 
 interface MapViewProps {
@@ -18,7 +18,7 @@ export default function MapView({ properties, onMarkerClick, selectedPropertyId 
   const markersRef = useRef<{ [key: string]: L.Marker }>({});
   const [isMapReady, setIsMapReady] = useState(false);
 
-  // Create custom marker icons
+  // Crear íconos de marcadores personalizados
   const createMarkerIcon = (property: Property, isSelected: boolean = false) => {
     const price = Math.floor(parseFloat(property.pricePerNight));
     const size = isSelected ? [120, 40] : [100, 35];
@@ -47,24 +47,24 @@ export default function MapView({ properties, onMarkerClick, selectedPropertyId 
         </div>
       `,
       className: 'custom-marker',
-      iconSize: size,
+      iconSize: size as [number, number],
       iconAnchor: [size[0] / 2, size[1]],
       popupAnchor: [0, -size[1]]
     });
   };
 
-  // Initialize Leaflet map
+  // Inicializar el mapa de Leaflet
   const initializeMap = () => {
     if (!mapRef.current || mapInstanceRef.current) return;
 
     try {
-      // Calculate center of Colombia properties
+  // Calcular el centro de las propiedades en Colombia
       const validProps = properties.filter(p => 
         p.latitude && p.longitude && 
         !isNaN(parseFloat(p.latitude)) && !isNaN(parseFloat(p.longitude))
       );
       
-      let center: [number, number] = [4.5709, -74.2973]; // Default Colombia center
+  let center: [number, number] = [4.5709, -74.2973]; // Centro predeterminado de Colombia
       
       if (validProps.length > 0) {
         const avgLat = validProps.reduce((sum, p) => sum + parseFloat(p.latitude!), 0) / validProps.length;
@@ -72,7 +72,7 @@ export default function MapView({ properties, onMarkerClick, selectedPropertyId 
         center = [avgLat, avgLng];
       }
 
-      // Create map with explicit dimensions
+  // Crear el mapa con dimensiones explícitas
       const map = L.map(mapRef.current, {
         center: center,
         zoom: 6,
@@ -85,7 +85,7 @@ export default function MapView({ properties, onMarkerClick, selectedPropertyId 
 
       console.log('Map initialized with center:', center);
 
-      // Add map tiles - using multiple reliable providers
+  // Agregar capas de mapa - usando varios proveedores confiables
       const tileLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
         maxZoom: 19,
         attribution: '© OpenStreetMap © CARTO',
@@ -94,7 +94,7 @@ export default function MapView({ properties, onMarkerClick, selectedPropertyId 
       
       tileLayer.on('tileerror', () => {
         console.log('Tile error, trying fallback...');
-        // Fallback to OpenStreetMap
+  // Alternativa a OpenStreetMap
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
           maxZoom: 19,
           attribution: '© OpenStreetMap'
@@ -105,13 +105,13 @@ export default function MapView({ properties, onMarkerClick, selectedPropertyId 
       
       console.log('Tiles added to map');
 
-      // Force map to resize after a moment
+  // Forzar el redimensionamiento del mapa después de un momento
       setTimeout(() => {
         map.invalidateSize();
         console.log('Map size invalidated');
       }, 200);
 
-      // Add another resize check
+  // Agregar otra verificación de redimensionamiento
       setTimeout(() => {
         map.invalidateSize();
         const container = map.getContainer();
@@ -125,17 +125,17 @@ export default function MapView({ properties, onMarkerClick, selectedPropertyId 
     }
   };
 
-  // Update markers on map
+  // Actualizar los marcadores en el mapa
   const updateMarkers = () => {
     if (!mapInstanceRef.current || !isMapReady) return;
 
-    // Clear existing markers
+  // Limpiar los marcadores existentes
     Object.values(markersRef.current).forEach(marker => {
       mapInstanceRef.current?.removeLayer(marker);
     });
     markersRef.current = {};
 
-    // Add new markers
+  // Agregar nuevos marcadores
     properties.forEach(property => {
       const lat = parseFloat(property.latitude || '0');
       const lng = parseFloat(property.longitude || '0');
@@ -147,7 +147,7 @@ export default function MapView({ properties, onMarkerClick, selectedPropertyId 
         icon: createMarkerIcon(property, isSelected)
       });
 
-      // Create popup content
+  // Crear contenido del popup
       const popupContent = `
         <div style="
           font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -209,7 +209,7 @@ export default function MapView({ properties, onMarkerClick, selectedPropertyId 
     });
   };
 
-  // Map control functions
+  // Funciones de control del mapa
   const handleZoomIn = () => {
     if (mapInstanceRef.current) {
       mapInstanceRef.current.zoomIn();
@@ -244,9 +244,9 @@ export default function MapView({ properties, onMarkerClick, selectedPropertyId 
     }
   };
 
-  // Initialize map on mount
+  // Inicializar el mapa al montar el componente
   useEffect(() => {
-    // Add a small delay to ensure the DOM is ready
+  // Agregar un pequeño retraso para asegurar que el DOM esté listo
     const timer = setTimeout(() => {
       initializeMap();
     }, 100);
@@ -261,7 +261,7 @@ export default function MapView({ properties, onMarkerClick, selectedPropertyId 
     };
   }, []);
 
-  // Update markers when properties change
+  // Actualizar los marcadores cuando cambian las propiedades
   useEffect(() => {
     if (isMapReady) {
       updateMarkers();
@@ -271,7 +271,7 @@ export default function MapView({ properties, onMarkerClick, selectedPropertyId 
   return (
     <div className="bg-white border border-gray-200 rounded-xl overflow-hidden relative shadow-lg" data-testid="map-container">
       <div className="relative">
-        {/* Leaflet Map Container */}
+  {/* Contenedor del mapa Leaflet */}
         <div
           ref={mapRef}
           className="w-full h-[600px] relative z-0 bg-blue-50"
@@ -283,7 +283,7 @@ export default function MapView({ properties, onMarkerClick, selectedPropertyId 
           }}
         />
         
-        {/* Map Controls */}
+  {/* Controles del mapa */}
         <div className="absolute top-4 right-4 flex flex-col space-y-2">
           <button
             onClick={handleZoomIn}
@@ -319,7 +319,7 @@ export default function MapView({ properties, onMarkerClick, selectedPropertyId 
           </button>
         </div>
 
-        {/* Loading overlay */}
+  {/* Capa de carga */}
         {!isMapReady && (
           <div className="absolute inset-0 bg-gray-100 flex items-center justify-center z-10">
             <div className="text-center">
@@ -331,7 +331,7 @@ export default function MapView({ properties, onMarkerClick, selectedPropertyId 
         )}
       </div>
 
-      {/* Map Legend */}
+  {/* Leyenda del mapa */}
       <div className="p-4 border-t border-gray-200 bg-gradient-to-r from-gray-50 to-white">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-6 text-sm">

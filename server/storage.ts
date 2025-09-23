@@ -2,32 +2,32 @@ import { type User, type InsertUser, type Property, type InsertProperty, type Bo
 import { randomUUID } from "crypto";
 
 export interface IStorage {
-  // Users
+  // Usuarios
   getUser(id: string): Promise<User | undefined>;
   getUserByEmail(email: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
   updateUser(id: string, updates: Partial<User>): Promise<User | undefined>;
 
-  // Properties
+  // Propiedades
   getProperties(limit?: number, offset?: number): Promise<Property[]>;
   getProperty(id: string): Promise<Property | undefined>;
   getPropertiesByHost(hostId: string): Promise<Property[]>;
   createProperty(property: InsertProperty): Promise<Property>;
   updateProperty(id: string, updates: Partial<Property>): Promise<Property | undefined>;
 
-  // Bookings
+  // Reservas
   getBooking(id: string): Promise<Booking | undefined>;
   getBookingsByUser(userId: string): Promise<Booking[]>;
   getBookingsByProperty(propertyId: string): Promise<Booking[]>;
   createBooking(booking: InsertBooking): Promise<Booking>;
   updateBooking(id: string, updates: Partial<Booking>): Promise<Booking | undefined>;
 
-  // Notifications
+  // Notificaciones
   getNotificationsByUser(userId: string): Promise<Notification[]>;
   createNotification(notification: InsertNotification): Promise<Notification>;
   markNotificationAsRead(id: string): Promise<boolean>;
 
-  // Payments
+  // Pagos
   getPayment(id: string): Promise<Payment | undefined>;
   getPaymentsByBooking(bookingId: string): Promise<Payment[]>;
   createPayment(payment: InsertPayment): Promise<Payment>;
@@ -46,7 +46,7 @@ export class MemStorage implements IStorage {
   }
 
   private seedData() {
-    // Create sample users
+  // Crear usuarios de ejemplo
     const sampleHost: User = {
       id: "host-1",
       email: "sarah@example.com",
@@ -74,9 +74,9 @@ export class MemStorage implements IStorage {
     this.users.set(sampleHost.id, sampleHost);
     this.users.set(sampleGuest.id, sampleGuest);
 
-    // Create sample properties
+  // Crear propiedades de ejemplo
     const sampleProperties: Property[] = [
-      // Cartagena
+  // Cartagena
       {
         id: "prop-1",
         title: "Casa Colonial en el Centro Histórico de Cartagena",
@@ -120,7 +120,7 @@ export class MemStorage implements IStorage {
         isActive: true,
         createdAt: new Date(),
       },
-      // Bogotá
+  // Bogotá
       {
         id: "prop-3",
         title: "Loft Contemporáneo en La Candelaria",
@@ -163,7 +163,7 @@ export class MemStorage implements IStorage {
         isActive: true,
         createdAt: new Date(),
       },
-      // Medellín
+  // Medellín
       {
         id: "prop-5",
         title: "Penthouse con Vista en El Poblado",
@@ -206,7 +206,7 @@ export class MemStorage implements IStorage {
         isActive: true,
         createdAt: new Date(),
       },
-      // Santa Marta
+  // Santa Marta
       {
         id: "prop-7",
         title: "Cabaña Frente al Mar en Taganga",
@@ -249,7 +249,7 @@ export class MemStorage implements IStorage {
         isActive: true,
         createdAt: new Date(),
       },
-      // Cali
+  // Cali
       {
         id: "prop-9",
         title: "Apartamento de Salsa en Granada",
@@ -271,7 +271,7 @@ export class MemStorage implements IStorage {
         isActive: true,
         createdAt: new Date(),
       },
-      // San Andrés
+  // San Andrés
       {
         id: "prop-10",
         title: "Hotel Boutique en San Andrés",
@@ -293,7 +293,7 @@ export class MemStorage implements IStorage {
         isActive: true,
         createdAt: new Date(),
       },
-      // Bucaramanga
+  // Bucaramanga
       {
         id: "prop-11",
         title: "Casa Moderna en Cabecera",
@@ -315,7 +315,7 @@ export class MemStorage implements IStorage {
         isActive: true,
         createdAt: new Date(),
       },
-      // Barranquilla
+  // Barranquilla
       {
         id: "prop-12",
         title: "Apartamento Carnavalero en El Prado",
@@ -337,7 +337,7 @@ export class MemStorage implements IStorage {
         isActive: true,
         createdAt: new Date(),
       },
-      // Pereira
+  // Pereira
       {
         id: "prop-13",
         title: "Finca Cafetera en el Eje Cafetero",
@@ -359,7 +359,7 @@ export class MemStorage implements IStorage {
         isActive: true,
         createdAt: new Date(),
       },
-      // Villa de Leyva
+  // Villa de Leyva
       {
         id: "prop-14",
         title: "Casa Colonial en Villa de Leyva",
@@ -381,7 +381,7 @@ export class MemStorage implements IStorage {
         isActive: true,
         createdAt: new Date(),
       },
-      // Leticia
+  // Leticia
       {
         id: "prop-15",
         title: "Lodge Amazónico en Leticia",
@@ -403,7 +403,7 @@ export class MemStorage implements IStorage {
         isActive: true,
         createdAt: new Date(),
       },
-      // Manizales
+  // Manizales
       {
         id: "prop-16",
         title: "Apartamento con Vista en Manizales",
@@ -425,7 +425,7 @@ export class MemStorage implements IStorage {
         isActive: true,
         createdAt: new Date(),
       },
-      // Popayán
+  // Popayán
       {
         id: "prop-17",
         title: "Casa Republicana en Popayán",
@@ -447,7 +447,7 @@ export class MemStorage implements IStorage {
         isActive: true,
         createdAt: new Date(),
       },
-      // Neiva
+  // Neiva
       {
         id: "prop-18",
         title: "Hotel Hacienda en el Huila",
@@ -469,7 +469,7 @@ export class MemStorage implements IStorage {
         isActive: true,
         createdAt: new Date(),
       },
-      // Pasto
+  // Pasto
       {
         id: "prop-19",
         title: "Casa Andina en Pasto",
@@ -491,7 +491,7 @@ export class MemStorage implements IStorage {
         isActive: true,
         createdAt: new Date(),
       },
-      // Armenia
+  // Armenia
       {
         id: "prop-20",
         title: "Finca Turística en Armenia",
@@ -520,7 +520,7 @@ export class MemStorage implements IStorage {
     });
   }
 
-  // User methods
+  // Métodos de usuario
   async getUser(id: string): Promise<User | undefined> {
     return this.users.get(id);
   }
@@ -552,7 +552,7 @@ export class MemStorage implements IStorage {
     return updatedUser;
   }
 
-  // Property methods
+  // Métodos de propiedad
   async getProperties(limit = 20, offset = 0): Promise<Property[]> {
     const allProperties = Array.from(this.properties.values())
       .filter(p => p.isActive)
@@ -596,7 +596,7 @@ export class MemStorage implements IStorage {
     return updatedProperty;
   }
 
-  // Booking methods
+  // Métodos de reserva
   async getBooking(id: string): Promise<Booking | undefined> {
     return this.bookings.get(id);
   }
@@ -631,7 +631,7 @@ export class MemStorage implements IStorage {
     return updatedBooking;
   }
 
-  // Notification methods
+  // Métodos de notificación
   async getNotificationsByUser(userId: string): Promise<Notification[]> {
     return Array.from(this.notifications.values())
       .filter(n => n.userId === userId)
@@ -659,7 +659,7 @@ export class MemStorage implements IStorage {
     return true;
   }
 
-  // Payment methods
+  // Métodos de pago
   async getPayment(id: string): Promise<Payment | undefined> {
     return this.payments.get(id);
   }

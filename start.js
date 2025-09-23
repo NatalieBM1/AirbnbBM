@@ -8,7 +8,7 @@ console.log('🚀 Starting AirBnB Backend and Frontend...\n');
 let backend = null;
 let frontend = null;
 
-// Start backend
+// Iniciar el backend
 console.log('📡 Starting Backend Server (Port 4000)...');
 backend = spawn('npm', ['run', 'dev'], {
   cwd: path.join(__dirname, 'backend'),
@@ -26,7 +26,7 @@ backend.on('exit', () => {
   cleanup();
 });
 
-// Give backend time to start
+// Dar tiempo para que el backend inicie
 setTimeout(() => {
   console.log('🌐 Starting Frontend Server (Port 3000)...');
   
@@ -59,6 +59,6 @@ function cleanup() {
   process.exit(0);
 }
 
-// Handle termination
+// Manejar la terminación
 process.on('SIGTERM', cleanup);
 process.on('SIGINT', cleanup);

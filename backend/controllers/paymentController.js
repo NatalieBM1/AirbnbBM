@@ -1,10 +1,11 @@
-// Sample payments data
+// Datos de pagos de ejemplo
 let payments = [];
 
 const getAllPayments = async (req, res) => {
   try {
-    const userId = req.user?.userId || '2'; // In production, get from JWT
+    const userId = req.user?.userId || '2'; // En producción, obtener desde JWT
     // Get bookings for user to filter payments
+    // Obtiene las reservas del usuario para filtrar los pagos
     const userPayments = payments.filter(p => p.userId === userId);
     
     res.json({ 
@@ -50,10 +51,10 @@ const createPayment = async (req, res) => {
     const newPayment = {
       id: 'payment-' + Date.now(),
       bookingId,
-      userId: req.user?.userId || '2', // In production, get from JWT
+      userId: req.user?.userId || '2', // En producción, obtener desde JWT
       amount,
       paymentMethod,
-      status: 'completed', // Simulate successful payment
+      status: 'completed', // Simula un pago exitoso
       transactionId: 'txn-' + Date.now(),
       createdAt: new Date().toISOString()
     };
